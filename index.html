@@ -1229,7 +1229,15 @@
   function renderAll(){
     renderTotals();
     renderObjList();
-    renderDetail();
+    // Agar foydalanuvchi detail panelda input/select ga yozayotgan bo'lsa,
+    // qayta render qilmaymiz (aks holda mobilda klaviatura yopiladi)
+    const detail = document.getElementById('detailPanel');
+    const active = document.activeElement;
+    const isTyping = active && detail && detail.contains(active) &&
+      (active.tagName === 'INPUT' || active.tagName === 'SELECT' || active.tagName === 'TEXTAREA');
+    if(!isTyping){
+      renderDetail();
+    }
     if(document.getElementById('workersModal').open) renderWorkersModal();
   }
 
