@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PROVIK — Obyektlar hisobi</title>
+<style>
+  :root{
+    --bg: #EFF2F0;
+    --panel: #FFFFFF;
+    --ink: #17201D;
+    --ink-soft: #55635C;
+    --line: #D8DED9;
+    --teal: #0E6E76;
+    --teal-deep: #0A4E54;
+    --amber: #C9821A;
+    --red: #B4472E;
+    --green: #2F7D4F;
+    --shadow: 0 1px 2px rgba(23,32,29,0.06);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #12181A;
+      --panel: #1A2224;
+      --ink: #E7EEEA;
+      --ink-soft: #9AABA3;
+      --line: #2A3538;
+      --teal: #3FA7AE;
+      --teal-deep: #2C7E85;
+      --amber: #E0A344;
+      --red: #E07A5F;
+      --green: #5FBE85;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #12181A;
+    --panel: #1A2224;
+    --ink: #E7EEEA;
+    --ink-soft: #9AABA3;
+    --line: #2A3538;
+    --teal: #3FA7AE;
+    --teal-deep: #2C7E85;
+    --amber: #E0A344;
+    --red: #E07A5F;
+    --green: #5FBE85;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35);
+  }
+  html{ scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+  *{ box-sizing: border-box; }
+  body{
+    height: 100%;
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{ max-width: 1040px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  .top{
+    display:flex; align-items:baseline; justify-content:space-between; gap: 12px;
+    margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand svg{ flex-shrink:0; }
+  h1{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 26px; font-weight: 700; margin:0; letter-spacing: -0.01em;
+  }
+  .sub{ color: var(--ink-soft); font-size: 13px; margin-top: 2px; }
+
+  .totals{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;
+  }
+  .tcard{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .tcard .lbl{ font-size: 12.5px; color: var(--ink-soft); }
+  .tcard .val{ font-size: 21px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .tcard.profit .val{ color: var(--teal-deep); }
+  .tcard.profit.neg .val{ color: var(--red); }
+
+  .layout{ display:grid; grid-template-columns: 260px 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 720px){ .layout{ grid-template-columns: 1fr; } }
+
+  .panel{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .panel-pad{ padding: 16px; }
+
+  .objlist-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 14px 16px 8px;
+  }
+  .objlist-head h2{ font-size: 14px; margin:0; color: var(--ink-soft); font-weight: 600; text-transform: none; }
+  .add-btn{
+    background: var(--teal); color:#fff; border:none; border-radius: 8px;
+    width: 26px; height: 26px; font-size: 17px; cursor:pointer; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .add-btn:hover{ background: var(--teal-deep); }
+
+  .obj-item{
+    padding: 12px 16px; border-top: 1px solid var(--line); cursor:pointer;
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .obj-item:hover{ background: color-mix(in srgb, var(--teal) 6%, transparent); }
+  .obj-item.active{ background: color-mix(in srgb, var(--teal) 12%, transparent); border-left: 3px solid var(--teal); padding-left: 13px; }
+  .obj-item .name{ font-weight: 600; font-size: 14.5px; }
+  .obj-item .meta{ font-size: 12px; color: var(--ink-soft); display:flex; justify-content:space-between; }
+  .obj-item .meta .p{ font-weight: 600; }
+  .obj-item .meta .p.neg{ color: var(--red); }
+  .obj-item .meta .p.pos{ color: var(--green); }
+  .badge{ font-size:10.5px; border-radius:4px; padding:1px 5px; white-space:nowrap; }
+  .badge.status-jarayonda{ color: var(--teal-deep); border:1px solid var(--teal); }
+  .badge.status-tugallangan{ color: var(--green); border:1px solid var(--green); }
+  .badge.status-toxtatilgan{ color: var(--red); border:1px solid var(--red); }
+  .badge.nds{ color: var(--amber); border:1px solid var(--amber); }
+  .badge.naqd{ color: var(--ink-soft); border:1px solid var(--line); }
+
+  .empty-list{ padding: 18px 16px; color: var(--ink-soft); font-size: 13.5px; }
+
+  .detail-head{
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;
+  }
+  .detail-head h2{ font-size: 19px; margin:0 0 4px; }
+  .detail-head .contract{ font-size: 13px; color: var(--ink-soft); }
+  .icon-btn{
+    background:none; border:1px solid var(--line); color: var(--ink-soft);
+    border-radius: 7px; padding: 5px 9px; font-size: 12.5px; cursor:pointer;
+  }
+  .icon-btn:hover{ border-color: var(--red); color: var(--red); }
+  select.status-select{
+    border:1px solid var(--line); background: var(--bg); color:var(--ink);
+    border-radius:7px; padding:5px 8px; font-size:12.5px; font-family:inherit;
+  }
+
+  .stat-row{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .stat{ text-align:left; }
+  .stat .lbl{ font-size: 11.5px; color: var(--ink-soft); }
+  .stat .val{ font-size: 17px; font-weight:700; margin-top:2px; font-variant-numeric: tabular-nums; }
+  .stat.income .val{ color: var(--green); }
+  .stat.expense .val{ color: var(--red); }
+  .stat.profit .val{ color: var(--teal-deep); }
+  .stat.profit.neg .val{ color: var(--red); }
+
+  .cat-bars{ padding: 14px 18px; border-bottom: 1px solid var(--line); display:flex; flex-direction:column; gap:8px; }
+  .cat-bar-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; }
+  .cat-bar-row .cn{ width: 150px; flex-shrink:0; color: var(--ink-soft); }
+  .cat-bar-row .track{ flex:1; height:7px; background: var(--line); border-radius:4px; overflow:hidden; }
+  .cat-bar-row .fill{ height:100%; border-radius:4px; }
+  .cat-bar-row .amt{ width: 100px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; }
+
+  .section-title{
+    padding: 12px 18px 4px; font-size: 12.5px; color: var(--ink-soft); font-weight:600;
+    border-top: 1px solid var(--line);
+  }
+
+  .payment-bar-wrap{ padding: 4px 18px 14px; }
+  .payment-track{ height:8px; background:var(--line); border-radius:5px; overflow:hidden; }
+  .payment-fill{ height:100%; background:var(--green); border-radius:5px; }
+  .payment-caption{ font-size:12px; color:var(--ink-soft); margin-top:6px; display:flex; justify-content:space-between; }
+
+  form.entry-form, form.inline-form{
+    padding: 14px 18px; border-bottom: 1px solid var(--line);
+    display:grid; grid-template-columns: 1.3fr 1fr 1fr auto; gap: 8px; align-items:end;
+  }
+  form.inline-form{ grid-template-columns: 1fr 1fr auto; border-bottom:none; padding-top:8px; }
+  @media (max-width: 640px){ form.entry-form, form.inline-form{ grid-template-columns: 1fr 1fr; } }
+  form.entry-form label, form.inline-form label{ font-size: 11.5px; color: var(--ink-soft); display:block; margin-bottom:3px; }
+  form.entry-form select, form.entry-form input, form.inline-form select, form.inline-form input{
+    width:100%; padding: 8px 9px; border-radius: 7px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-size: 13.5px; font-family: inherit;
+  }
+  form.entry-form select:focus, form.entry-form input:focus{ outline: 2px solid var(--teal); outline-offset:1px; }
+  form.entry-form button, form.inline-form button{
+    background: var(--teal); color:#fff; border:none; border-radius:7px;
+    padding: 8px 14px; font-size: 13.5px; font-weight:600; cursor:pointer; white-space:nowrap;
+  }
+  form.entry-form button:hover, form.inline-form button:hover{ background: var(--teal-deep); }
+  form.entry-form button.cancel-edit{ background:none; border:1px solid var(--line); color:var(--ink-soft); }
+
+  .entries{ max-height: 380px; overflow-y:auto; }
+  .entry{
+    padding: 10px 18px; border-bottom: 1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; gap: 10px; font-size: 13.5px;
+  }
+  .entry .left{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .entry .desc{ font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .entry .tag{ font-size: 11px; color: var(--ink-soft); display:flex; gap:6px; align-items:center; }
+  .entry .dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .entry .right{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .entry .amt{ font-variant-numeric: tabular-nums; font-weight:600; }
+  .entry .amt.income{ color: var(--green); }
+  .entry .amt.expense{ color: var(--red); }
+  .entry .edit, .entry .del{ background:none; border:none; color: var(--ink-soft); cursor:pointer; font-size:14px; padding:2px 4px; }
+  .entry .del:hover{ color: var(--red); }
+  .entry .edit:hover{ color: var(--teal); }
+
+  .empty-state{
+    padding: 60px 24px; text-align:center; color: var(--ink-soft);
+  }
+  .empty-state .big{ font-size: 15px; color: var(--ink); font-weight:600; margin-bottom:6px; }
+
+  dialog.modal{
+    border:none; border-radius: 12px; padding:0; max-width: 420px; width: calc(100% - 40px);
+    background: var(--panel); color: var(--ink); box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+  dialog.modal::backdrop{ background: rgba(10,15,14,0.45); }
+  .modal-pad{ padding: 20px; max-height: 80vh; overflow-y:auto; }
+  .modal-pad h3{ margin:0 0 14px; font-size:16px; }
+  .modal-pad label{ font-size:12.5px; color:var(--ink-soft); display:block; margin: 10px 0 4px; }
+  .modal-pad input, .modal-pad select{
+    width:100%; padding: 9px 10px; border-radius: 7px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-size: 14px; font-family: inherit;
+  }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
+  .btn-ghost{ background:none; border:1px solid var(--line); color:var(--ink-soft); border-radius:7px; padding:8px 14px; font-size:13.5px; cursor:pointer; }
+  .btn-solid{ background: var(--teal); border:none; color:#fff; border-radius:7px; padding:8px 14px; font-size:13.5px; font-weight:600; cursor:pointer; }
+  .btn-solid:hover{ background: var(--teal-deep); }
+
+  .worker-row{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px;
+  }
+  .worker-row:last-child{ border-bottom:none; }
+  .worker-row .wname{ font-weight:600; }
+  .worker-row .wmeta{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
+  .worker-row .wamt{ font-weight:700; color: var(--amber); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="15" cy="15" r="14" stroke="var(--teal)" stroke-width="2"/>
+        <path d="M15 6 L15 24 M6 15 L24 15 M9.5 9.5 L20.5 20.5 M20.5 9.5 L9.5 20.5" stroke="var(--teal)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>PROVIK — Obyektlar hisobi</h1>
+        <div class="sub">Har bir obyekt bo'yicha xarajat va foyda</div>
+        <div class="sub" id="storageNote" style="margin-top:2px;">Ma'lumotlar shu qurilmada saqlanadi. Sherik bilan almashish: «Zaxira saqlash» → yuborish → sherik «Zaxira yuklash».</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="icon-btn" id="openWorkersBtn">Ishchilar</button>
+      <button class="icon-btn" id="exportAllBtn">Umumiy hisobot (CSV)</button>
+      <button class="icon-btn" id="backupBtn">Zaxira saqlash</button>
+      <button class="icon-btn" id="restoreBtn">Zaxira yuklash</button>
+      <input type="file" id="restoreFile" accept=".json,application/json" style="display:none;">
+      <button class="icon-btn" id="themeToggle">Tungi rejim</button>
+    </div>
+  </div>
+
+  <div class="totals">
+    <div class="tcard">
+      <div class="lbl">Jami kelishilgan summa</div>
+      <div class="val" id="totContract">0</div>
+    </div>
+    <div class="tcard">
+      <div class="lbl">Jami xarajat</div>
+      <div class="val" id="totExpense">0</div>
+    </div>
+    <div class="tcard profit">
+      <div class="lbl">Umumiy foyda</div>
+      <div class="val" id="totProfit">0</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="objlist-head">
+        <h2>Obyektlar</h2>
+        <button class="add-btn" id="openAddObj" title="Yangi obyekt">+</button>
+      </div>
+      <div id="objList"></div>
+    </div>
+
+    <div class="panel" id="detailPanel"></div>
+  </div>
+</div>
+
+<dialog class="modal" id="addObjModal">
+  <div class="modal-pad">
+    <h3>Yangi obyekt</h3>
+    <label for="newObjName">Obyekt nomi</label>
+    <input id="newObjName" type="text" placeholder="Masalan: Chilonzor-15 savdo markazi">
+    <label for="newObjContract">Kelishilgan summa (so'm)</label>
+    <input id="newObjContract" type="number" min="0" step="1" placeholder="0">
+    <label for="newObjSettlement">Kelishuv turi</label>
+    <select id="newObjSettlement">
+      <option value="naqd">Naqd</option>
+      <option value="nds">NDS bilan</option>
+    </select>
+    <div id="newObjVatWrap" style="display:none;">
+      <label for="newObjVatPct">NDS foizi (%)</label>
+      <input id="newObjVatPct" type="number" min="0" max="100" step="0.1" value="12">
+    </div>
+    <label for="newObjStatus">Obyekt holati</label>
+    <select id="newObjStatus">
+      <option value="jarayonda">Jarayonda</option>
+      <option value="tugallangan">Tugallangan</option>
+      <option value="toxtatilgan">To'xtatilgan</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelAddObj">Bekor qilish</button>
+      <button class="btn-solid" id="saveAddObj">Qo'shish</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="modal" id="confirmModal">
+  <div class="modal-pad">
+    <h3 id="confirmText">O'chirilsinmi?</h3>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="confirmCancel">Bekor qilish</button>
+      <button class="btn-solid" id="confirmOk" style="background:var(--red);">O'chirish</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="modal" id="workersModal">
+  <div class="modal-pad">
+    <h3>Ishchilar</h3>
+    <form id="addWorkerForm" style="display:flex; gap:8px; margin-bottom:12px;">
+      <input id="newWorkerName" type="text" placeholder="Ishchi ismi" style="flex:1;">
+      <button class="btn-solid" type="submit">Qo'shish</button>
+    </form>
+    <div id="workersList"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="closeWorkersBtn">Yopish</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Node.js server API'ga ulanish moduli
+  const API_URL = ''; // Masalan: http://localhost:3000 yoki o'z serveringiz manzili
+  
+  window.realDb = {
+    collection: (name) => {
+      return {
+        onSnapshot: (cb) => {
+          const poll = async () => {
+            try {
+              const res = await fetch(API_URL + '/api/' + name);
+              const col = await res.json();
+              const data = {
+                docs: Object.keys(col).map(id => ({
+                  id,
+                  data: () => col[id]
+                }))
+              };
+              cb(data);
+            } catch (e) {
+              // Serverga ulanib bo'lmadi
+            }
+            setTimeout(poll, 2000); // Har 2 soniyada yangilab turadi (real-time uchun)
+          };
+          poll();
+          return () => {};
+        },
+        add: async (obj) => {
+          const res = await fetch(API_URL + '/api/' + name, {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          return await res.json();
+        },
+        doc: (id) => {
+          return {
+            update: async (patch) => {
+              await fetch(API_URL + '/api/' + name + '/' + id, {
+                method: 'PUT',
+                body: JSON.stringify(patch),
+                headers: { 'Content-Type': 'application/json' }
+              });
+            },
+            set: async (obj) => {
+              await fetch(API_URL + '/api/' + name + '/' + id, {
+                method: 'PUT',
+                body: JSON.stringify(obj),
+                headers: { 'Content-Type': 'application/json' }
+              });
+            },
+            delete: async () => {
+              await fetch(API_URL + '/api/' + name + '/' + id, {
+                method: 'DELETE'
+              });
+            }
+          };
+        }
+      };
+    }
+  };
+</script>
+
+<script>
+/* Mustaqil (offline) rejim: ma'lumotlar shu qurilma brauzerida saqlanadi. */
+(function(){
+  const KEY = 'provik_hisob_v1';
+  let data = {};
+  let persistent = true;
+  try{ data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){ persistent = false; data = {}; }
+  const listeners = {};
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify(data)); }
+    catch(e){ persistent = false; }
+  }
+  function snap(name){
+    const col = data[name] || {};
+    return { docs: Object.keys(col).map(id => ({ id, data: () => col[id] })) };
+  }
+  function notify(name){ (listeners[name] || []).forEach(cb => cb(snap(name))); }
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  const db = { collection(name){
+    return {
+      onSnapshot(cb){ (listeners[name] = listeners[name] || []).push(cb); setTimeout(() => cb(snap(name)), 0); return () => {}; },
+      async add(obj){ const id = uid(); (data[name] = data[name] || {})[id] = obj; save(); notify(name); return { id }; },
+      doc(id){
+        return {
+          async update(patch){ const c = data[name] || {}; if(c[id]){ c[id] = Object.assign({}, c[id], patch); save(); notify(name); } },
+          async set(obj){ (data[name] = data[name] || {})[id] = obj; save(); notify(name); },
+          async delete(){ if(data[name]){ delete data[name][id]; save(); notify(name); } }
+        };
+      }
+    };
+  }};
+  function download(filename, text, mime){
+    const blob = new Blob([text], { type: mime + ';charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+  async function saveFile(filename, text, mime){
+    try{
+      if(window.claude && typeof window.claude.use === 'function'){
+        const dl = await window.claude.use('downloads');
+        if(dl){ await dl.save({ filename, data: text }); return; }
+      }
+    }catch(e){ /* viewer declined or unavailable: fall through */ return; }
+    download(filename, text, mime);
+  }
+  window.__localUse = async function(cap){
+    if(cap === 'db') return db;
+    if(cap === 'downloads') return { save: async ({ filename, data: d }) => saveFile(filename, d, 'text/csv') };
+    throw new Error('unavailable');
+  };
+
+  // Zaxira nusxa: saqlash va birlashtirib yuklash
+  const backupBtn = document.getElementById('backupBtn');
+  const restoreBtn = document.getElementById('restoreBtn');
+  const restoreFile = document.getElementById('restoreFile');
+  if(backupBtn) backupBtn.addEventListener('click', () => {
+    const d = new Date(); const p = n => String(n).padStart(2, '0');
+    const name = 'PROVIK_zaxira_' + d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + '.json';
+    saveFile(name, JSON.stringify(data), 'application/json');
+  });
+  if(restoreBtn && restoreFile){
+    restoreBtn.addEventListener('click', () => restoreFile.click());
+    restoreFile.addEventListener('change', () => {
+      const f = restoreFile.files && restoreFile.files[0];
+      if(!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        try{
+          const inc = JSON.parse(r.result);
+          if(!inc || typeof inc !== 'object') throw new Error('bad');
+          let n = 0;
+          ['objects','entries','payments','workers'].forEach(name => {
+            const col = inc[name]; if(!col || typeof col !== 'object') return;
+            data[name] = data[name] || {};
+            Object.keys(col).forEach(id => { data[name][id] = col[id]; n++; });
+          });
+          save();
+          ['objects','entries','payments','workers'].forEach(notify);
+          alert("Zaxira birlashtirildi: " + n + " ta yozuv qo'shildi/yangilandi.");
+        }catch(e){ alert("Fayl noto'g'ri. PROVIK zaxira faylini (.json) tanlang."); }
+        restoreFile.value = '';
+      };
+      r.readAsText(f);
+    });
+  }
+  window.addEventListener('load', () => {
+    if(!persistent){
+      const n = document.getElementById('storageNote');
+      if(n){ n.textContent = "Diqqat: brauzer ma'lumotni saqlamayapti. Faylni Chrome yoki Safari'da oching, aks holda yopganda hammasi o'chadi."; n.style.color = '#B5372C'; }
+    }
+  });
+})();
+</script>
+<script>
+(function(){
+  const CATS = [
+    {id:'ventjihoz', name:"Ventilyatsiya jihozlari", color:'#0E6E76'},
+    {id:'kondit', name:"Konditsionerlar", color:'#2F7D4F'},
+    {id:'vrf', name:"VRF tizimi materiallari", color:'#3D6FB4'},
+    {id:'ishchi', name:"Ishchilarga pul", color:'#C9821A'},
+    {id:'dastavka', name:"Dastavka", color:'#8A5FB0'},
+    {id:'boshqa', name:"Boshqa xarajat", color:'#7A8A83'}
+  ];
+  const STATUS_LABELS = { jarayonda: 'Jarayonda', tugallangan: 'Tugallangan', toxtatilgan: "To'xtatilgan" };
+
+  // Shared state comes from the db capability so every teammate sees the
+  // same objects, entries, payments and workers, live.
+  let state = { objects: [], activeId: null };
+  let workers = []; // {id, name}
+  let db = null;
+  let assetsCap = null;
+  let downloadsCap = null;
+  let dbStatus = 'connecting'; // 'connecting' | 'ready' | 'unavailable'
+  let filterMonth = ''; // '' = barchasi, else 'YYYY-MM'
+  let editingEntryId = null;
+
+  const rawObjects = new Map();   // id -> {name, contract, settlementType, vatPercent, status, createdAt}
+  const rawEntries = new Map();   // id -> {objId, desc, cat, amount, date, workerId, receiptId, createdAt}
+  const rawPayments = new Map();  // id -> {objId, amount, date, note, createdAt}
+  const rawWorkers = new Map();   // id -> {name, createdAt}
+
+  function rebuildStateFromRaw(){
+    const entriesByObj = new Map();
+    rawEntries.forEach((e, id)=>{
+      const list = entriesByObj.get(e.objId) || [];
+      list.push({ id, ...e });
+      entriesByObj.set(e.objId, list);
+    });
+    const paymentsByObj = new Map();
+    rawPayments.forEach((p, id)=>{
+      const list = paymentsByObj.get(p.objId) || [];
+      list.push({ id, ...p });
+      paymentsByObj.set(p.objId, list);
+    });
+    state.objects = Array.from(rawObjects.entries()).map(([id, o])=>({
+      id, name: o.name, contract: o.contract,
+      settlementType: o.settlementType || 'naqd',
+      vatPercent: o.vatPercent,
+      status: o.status || 'jarayonda',
+      createdAt: o.createdAt || 0,
+      entries: entriesByObj.get(id) || [],
+      payments: paymentsByObj.get(id) || []
+    })).sort((a,b)=> (a.createdAt||0) - (b.createdAt||0) || a.name.localeCompare(b.name));
+    if(!state.activeId && state.objects.length) state.activeId = state.objects[0].id;
+    if(state.activeId && !state.objects.find(o=>o.id===state.activeId)){
+      state.activeId = state.objects[0]?.id || null;
+    }
+    workers = Array.from(rawWorkers.entries())
+      .map(([id,w])=>({ id, name: w.name, createdAt: w.createdAt||0 }))
+      .sort((a,b)=> a.name.localeCompare(b.name));
+  }
+
+  async function initDb(){
+    try{
+      db = window.realDb || await window.__localUse('db');
+    }catch(e){ db = window.realDb || null; }
+
+    if(!db){
+      dbStatus = 'unavailable';
+      renderAll();
+      return;
+    }
+    dbStatus = 'ready';
+
+    db.collection('objects').onSnapshot(snap=>{
+      rawObjects.clear();
+      snap.docs.forEach(d=>{ const data = d.data(); if(data) rawObjects.set(d.id, data); });
+      rebuildStateFromRaw();
+      renderAll();
+    }, err=>{ console.error('objects snapshot error', err); });
+
+    db.collection('entries').onSnapshot(snap=>{
+      rawEntries.clear();
+      snap.docs.forEach(d=>{ const data = d.data(); if(data) rawEntries.set(d.id, data); });
+      rebuildStateFromRaw();
+      renderAll();
+    }, err=>{ console.error('entries snapshot error', err); });
+
+    db.collection('payments').onSnapshot(snap=>{
+      rawPayments.clear();
+      snap.docs.forEach(d=>{ const data = d.data(); if(data) rawPayments.set(d.id, data); });
+      rebuildStateFromRaw();
+      renderAll();
+    }, err=>{ console.error('payments snapshot error', err); });
+
+    db.collection('workers').onSnapshot(snap=>{
+      rawWorkers.clear();
+      snap.docs.forEach(d=>{ const data = d.data(); if(data) rawWorkers.set(d.id, data); });
+      rebuildStateFromRaw();
+      renderAll();
+    }, err=>{ console.error('workers snapshot error', err); });
+
+    assetsCap = null;
+    try{ downloadsCap = await window.__localUse('downloads'); }catch(e){ downloadsCap = null; }
+    renderAll();
+  }
+
+  function fmt(n){
+    n = Math.round(Number(n)||0);
+    return n.toLocaleString('ru-RU').replace(/,/g,' ') + " so'm";
+  }
+
+  function csvEscape(v){
+    v = v==null ? '' : String(v);
+    if(/[",\n;]/.test(v)) return '"' + v.replace(/"/g,'""') + '"';
+    return v;
+  }
+
+  async function downloadCsv(filename, rows){
+    if(!downloadsCap) return;
+    const csv = '\uFEFF' + rows.map(r=> r.map(csvEscape).join(';')).join('\r\n');
+    try{ await downloadsCap.save({ filename, data: csv }); }
+    catch(e){ console.error('csv export error', e); }
+  }
+
+  function exportOverallCsv(){
+    const rows = [['Obyekt','Holati','Kelishuv turi','Kelishilgan summa','Sof summa','NDS summasi','Jami xarajat','Foyda',"To'langan",'Qolgan']];
+    state.objects.forEach(o=>{
+      const t = objTotals(o);
+      const type = o.settlementType==='nds' ? ('NDS ' + o.vatPercent + '%') : 'Naqd';
+      rows.push([o.name, STATUS_LABELS[o.status]||o.status, type, t.contract, Math.round(t.netAmount), Math.round(t.vatAmount), t.expense, t.profit, t.paid, t.remaining]);
+    });
+    downloadCsv('PROVIK_hisobot.csv', rows);
+  }
+
+  function exportObjectCsv(obj, entries){
+    const rows = [['Sana','Tavsif','Toifa','Ishchi','Summa']];
+    entries.forEach(e=>{
+      const cat = CATS.find(c=>c.id===e.cat) || CATS[CATS.length-1];
+      const w = e.workerId ? workers.find(x=>x.id===e.workerId) : null;
+      rows.push([e.date||'', e.desc||'', cat.name, w?w.name:'', e.amount]);
+    });
+    const safeName = (obj.name||'obyekt').replace(/[^\p{L}\p{N}]+/gu,'_');
+    downloadCsv(safeName + '_xarajatlar.csv', rows);
+  }
+
+  function objTotals(obj){
+    let expense = 0;
+    const byCat = {};
+    CATS.forEach(c=> byCat[c.id]=0);
+    (obj.entries||[]).forEach(e=>{
+      expense += Number(e.amount)||0;
+      byCat[e.cat] = (byCat[e.cat]||0) + (Number(e.amount)||0);
+    });
+    const contract = Number(obj.contract)||0;
+    const profit = contract - expense;
+    let vatAmount = 0, netAmount = contract;
+    if(obj.settlementType === 'nds' && obj.vatPercent){
+      const pct = Number(obj.vatPercent)||0;
+      netAmount = contract / (1 + pct/100);
+      vatAmount = contract - netAmount;
+    }
+    const paid = (obj.payments||[]).reduce((s,p)=> s + (Number(p.amount)||0), 0);
+    const remaining = contract - paid;
+    const paidPct = contract>0 ? Math.min(100, Math.round((paid/contract)*100)) : 0;
+    return { expense, contract, profit, byCat, vatAmount, netAmount, paid, remaining, paidPct };
+  }
+
+  function renderTotals(){
+    let contract=0, expense=0, paid=0;
+    state.objects.forEach(o=>{
+      const t = objTotals(o);
+      contract += t.contract; expense += t.expense; paid += t.paid;
+    });
+    const profit = contract - expense;
+    document.getElementById('totContract').textContent = fmt(contract);
+    document.getElementById('totExpense').textContent = fmt(expense);
+    const profitEl = document.getElementById('totProfit');
+    profitEl.textContent = fmt(profit);
+    profitEl.parentElement.classList.toggle('neg', profit < 0);
+    const exportAllBtn = document.getElementById('exportAllBtn');
+    if(exportAllBtn){
+      exportAllBtn.disabled = !downloadsCap;
+      exportAllBtn.title = downloadsCap ? '' : "Bu ko'rinishda mavjud emas";
+    }
+  }
+
+  function renderObjList(){
+    const list = document.getElementById('objList');
+    if(dbStatus === 'unavailable'){
+      list.innerHTML = '<div class="empty-list">Umumiy saqlash bu ko\'rinishda ishlamayapti. Sahifani qaytadan oching.</div>';
+      return;
+    }
+    if(state.objects.length === 0){
+      list.innerHTML = '<div class="empty-list">Hali obyekt yo\'q. Yuqoridagi + tugmasi orqali qo\'shing.</div>';
+      return;
+    }
+    list.innerHTML = state.objects.map(o=>{
+      const t = objTotals(o);
+      const cls = t.profit < 0 ? 'neg' : 'pos';
+      const typeBadge = o.settlementType==='nds'
+        ? ('<span class="badge nds">NDS ' + o.vatPercent + '%</span>')
+        : '<span class="badge naqd">Naqd</span>';
+      const statusBadge = '<span class="badge status-' + o.status + '">' + (STATUS_LABELS[o.status]||o.status) + '</span>';
+      return `<div class="obj-item ${o.id===state.activeId?'active':''}" data-id="${o.id}">
+        <div class="name" style="display:flex; align-items:center; gap:6px; justify-content:space-between; flex-wrap:wrap;"><span>${escapeHtml(o.name)}</span><span style="display:flex; gap:4px; flex-wrap:wrap;">${statusBadge}${typeBadge}</span></div>
+        <div class="meta"><span>${(o.entries||[]).length} ta xarajat</span><span class="p ${cls}">${fmt(t.profit)}</span></div>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('.obj-item').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        state.activeId = el.getAttribute('data-id');
+        editingEntryId = null;
+        renderAll();
+      });
+    });
+  }
+
+  function escapeHtml(s){
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  function workerOptionsHtml(selectedId){
+    const opts = workers.map(w=> `<option value="${w.id}" ${w.id===selectedId?'selected':''}>${escapeHtml(w.name)}</option>`).join('');
+    return `<option value="">— tanlanmagan —</option>${opts}<option value="__new__">+ Yangi ishchi</option>`;
+  }
+
+  function renderDetail(){
+    const panel = document.getElementById('detailPanel');
+    const obj = state.objects.find(o=>o.id===state.activeId);
+    if(!obj){
+      panel.innerHTML = `<div class="empty-state">
+        <div class="big">Obyekt tanlanmagan</div>
+        <div>Chapdagi ro'yxatdan obyekt tanlang yoki yangisini qo'shing.</div>
+      </div>`;
+      return;
+    }
+    const t = objTotals(obj);
+    const catRows = CATS.map(c=>{
+      const amt = t.byCat[c.id]||0;
+      const pct = t.expense>0 ? Math.round((amt/t.expense)*100) : 0;
+      if(amt===0) return '';
+      return `<div class="cat-bar-row">
+        <div class="cn">${c.name}</div>
+        <div class="track"><div class="fill" style="width:${pct}%; background:${c.color}"></div></div>
+        <div class="amt">${fmt(amt)}</div>
+      </div>`;
+    }).join('');
+
+    const allEntries = (obj.entries||[]).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||'') || b.createdAt-a.createdAt);
+    const entries = filterMonth ? allEntries.filter(e=> (e.date||'').slice(0,7) === filterMonth) : allEntries;
+    const filteredExpense = entries.reduce((s,e)=> s + (Number(e.amount)||0), 0);
+    const editingEntry = editingEntryId ? allEntries.find(e=>e.id===editingEntryId) : null;
+
+    const entriesHtml = entries.length ? entries.map(e=>{
+      const cat = CATS.find(c=>c.id===e.cat) || CATS[CATS.length-1];
+      const workerName = e.workerId ? (workers.find(w=>w.id===e.workerId)?.name) : null;
+      const receipt = e.receiptId ? `<a href="/_blob/${e.receiptId}" target="_blank" rel="noopener" title="Chekni ko'rish" style="flex-shrink:0;">
+          <img src="/_blob/${e.receiptId}" alt="chek" style="width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--line);">
+        </a>` : '';
+      return `<div class="entry" data-eid="${e.id}">
+        <div class="left">
+          <div class="desc">${escapeHtml(e.desc || cat.name)}</div>
+          <div class="tag"><span class="dot" style="background:${cat.color}"></span>${cat.name}${workerName?' · '+escapeHtml(workerName):''}${e.date? ' · '+e.date : ''}</div>
+        </div>
+        <div class="right">
+          ${receipt}
+          <div class="amt expense">-${fmt(e.amount)}</div>
+          <button class="edit" data-eid="${e.id}" title="Tahrirlash">✎</button>
+          <button class="del" data-eid="${e.id}" title="O'chirish">✕</button>
+        </div>
+      </div>`;
+    }).join('') : `<div class="empty-list">${filterMonth ? "Shu oyda xarajat yo'q." : "Hali xarajat kiritilmagan."}</div>`;
+
+    const payments = (obj.payments||[]).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||'') || b.createdAt-a.createdAt);
+    const paymentsHtml = payments.length ? payments.map(p=> `
+      <div class="entry" data-pid="${p.id}">
+        <div class="left">
+          <div class="desc">${escapeHtml(p.note || "To'lov")}</div>
+          <div class="tag">${p.date||''}</div>
+        </div>
+        <div class="right">
+          <div class="amt income">+${fmt(p.amount)}</div>
+          <button class="del" data-pid="${p.id}" title="O'chirish">✕</button>
+        </div>
+      </div>`).join('') : '<div class="empty-list">Hali to\'lov kiritilmagan.</div>';
+
+    panel.innerHTML = `
+      <div class="detail-head">
+        <div>
+          <h2>${escapeHtml(obj.name)}</h2>
+          <div class="contract">Kelishilgan summa: ${fmt(obj.contract)} · ${obj.settlementType==='nds' ? ('NDS bilan (' + obj.vatPercent + '%)') : 'Naqd shaklda'}</div>
+          ${obj.settlementType==='nds' ? `<div class="contract">Shundan: sof summa ${fmt(t.netAmount)}, NDS summasi ${fmt(t.vatAmount)}</div>` : ''}
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <select class="status-select" id="statusSelect">
+            <option value="jarayonda" ${obj.status==='jarayonda'?'selected':''}>Jarayonda</option>
+            <option value="tugallangan" ${obj.status==='tugallangan'?'selected':''}>Tugallangan</option>
+            <option value="toxtatilgan" ${obj.status==='toxtatilgan'?'selected':''}>To'xtatilgan</option>
+          </select>
+          <button class="icon-btn" id="delObjBtn">O'chirish</button>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat income"><div class="lbl">Kelishilgan summa</div><div class="val">${fmt(t.contract)}</div></div>
+        <div class="stat expense"><div class="lbl">Jami xarajat</div><div class="val">${fmt(t.expense)}</div></div>
+        <div class="stat profit ${t.profit<0?'neg':''}"><div class="lbl">Foyda</div><div class="val">${fmt(t.profit)}</div></div>
+      </div>
+      ${catRows ? `<div class="cat-bars">${catRows}</div>` : ''}
+
+      <div class="section-title">Mijoz to'lovlari</div>
+      <div class="payment-bar-wrap">
+        <div class="payment-track"><div class="payment-fill" style="width:${t.paidPct}%;"></div></div>
+        <div class="payment-caption">
+          <span>To'langan: ${fmt(t.paid)} (${t.paidPct}%)</span>
+          <span>Qolgan: ${fmt(t.remaining)}</span>
+        </div>
+      </div>
+      <form class="inline-form" id="paymentForm">
+        <div>
+          <label for="pAmt">To'lov summasi</label>
+          <input id="pAmt" type="number" min="0" step="1" placeholder="0" required>
+        </div>
+        <div>
+          <label for="pNote">Izoh (ixtiyoriy)</label>
+          <input id="pNote" type="text" placeholder="Masalan: 2-bosqich">
+        </div>
+        <button type="submit">Qo'shish</button>
+      </form>
+      <div class="entries" style="max-height:180px;">${paymentsHtml}</div>
+
+      <div class="section-title">${editingEntry ? "Xarajatni tahrirlash" : "Xarajat qo'shish"}</div>
+      <form class="entry-form" id="entryForm">
+        <div style="grid-column: span 1;">
+          <label for="eDesc">Tavsif</label>
+          <input id="eDesc" type="text" placeholder="Masalan: kompressor" value="${editingEntry?escapeHtml(editingEntry.desc||''):''}">
+        </div>
+        <div>
+          <label for="eCat">Toifa</label>
+          <select id="eCat">${CATS.map(c=>`<option value="${c.id}" ${editingEntry&&editingEntry.cat===c.id?'selected':''}>${c.name}</option>`).join('')}</select>
+        </div>
+        <div>
+          <label for="eAmt">Summa (so'm)</label>
+          <input id="eAmt" type="number" min="0" step="1" placeholder="0" required value="${editingEntry?editingEntry.amount:''}">
+        </div>
+        <button type="submit">${editingEntry ? "Yangilash" : "Qo'shish"}</button>
+        <div id="workerFieldWrap" style="grid-column: 1 / -1; display:none;">
+          <label for="eWorker">Ishchi</label>
+          <select id="eWorker">${workerOptionsHtml(editingEntry?editingEntry.workerId:null)}</select>
+        </div>
+        <div style="grid-column: 1 / -1;${assetsCap ? '' : 'display:none;'}">
+          <label for="eReceipt">Chek/rasm (ixtiyoriy)${assetsCap ? '' : ' — bu ko\'rinishda mavjud emas'}</label>
+          <input id="eReceipt" type="file" accept="image/*" ${assetsCap ? '' : 'disabled'} style="padding:4px 0; border:none; background:none;">
+        </div>
+        ${editingEntry ? `<button type="button" class="cancel-edit" id="cancelEditBtn" style="grid-column:1/-1;">Bekor qilish</button>` : ''}
+      </form>
+
+      <div style="padding: 12px 18px; border-bottom: 1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <label for="filterMonthInput" style="font-size:12.5px; color:var(--ink-soft);">Oy bo'yicha hisobot:</label>
+        <input type="month" id="filterMonthInput" value="${filterMonth}" style="padding:6px 8px; border-radius:7px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font-size:13px;">
+        ${filterMonth ? `<button class="icon-btn" id="clearFilterBtn">Barchasi</button><span style="font-size:12.5px;color:var(--ink-soft);">Shu oyda xarajat: ${fmt(filteredExpense)}</span>` : ''}
+        <button class="icon-btn" id="exportObjBtn" style="margin-left:auto;" ${downloadsCap ? '' : 'disabled title="Bu ko\'rinishda mavjud emas"'}>CSV yuklab olish</button>
+      </div>
+      <div class="entries">${entriesHtml}</div>
+    `;
+
+    // toggle worker field visibility based on selected category, live
+    const catSelect = document.getElementById('eCat');
+    const workerWrap = document.getElementById('workerFieldWrap');
+    function syncWorkerVisibility(){
+      workerWrap.style.display = catSelect.value === 'ishchi' ? 'block' : 'none';
+    }
+    catSelect.addEventListener('change', syncWorkerVisibility);
+    syncWorkerVisibility();
+
+    document.getElementById('eWorker').addEventListener('change', (ev)=>{
+      if(ev.target.value === '__new__'){
+        ev.target.value = '';
+        document.getElementById('workersModal').showModal();
+        renderWorkersModal();
+        const nameInput = document.getElementById('newWorkerName');
+        if(nameInput) nameInput.focus();
+      }
+    });
+
+    document.getElementById('statusSelect').addEventListener('change', async (ev)=>{
+      if(!db) return;
+      try{ await db.collection('objects').doc(obj.id).update({ status: ev.target.value }); }
+      catch(e){ console.error('status update error', e); }
+    });
+
+    document.getElementById('delObjBtn').addEventListener('click', ()=>{
+      askConfirm(`"${obj.name}" obyektini butunlay o'chirasizmi?`, async ()=>{
+        if(!db) return;
+        try{
+          await Promise.all((obj.entries||[]).map(e=> db.collection('entries').doc(e.id).delete()));
+          await Promise.all((obj.payments||[]).map(p=> db.collection('payments').doc(p.id).delete()));
+          await db.collection('objects').doc(obj.id).delete();
+          if(state.activeId===obj.id) state.activeId = null;
+        }catch(e){ console.error('delete object error', e); }
+      });
+    });
+
+    document.getElementById('filterMonthInput').addEventListener('change', (ev)=>{
+      filterMonth = ev.target.value || '';
+      renderDetail();
+    });
+    const clearBtn = document.getElementById('clearFilterBtn');
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{ filterMonth = ''; renderDetail(); });
+    document.getElementById('exportObjBtn').addEventListener('click', ()=>{
+      exportObjectCsv(obj, entries);
+    });
+
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    if(cancelEditBtn) cancelEditBtn.addEventListener('click', ()=>{ editingEntryId = null; renderDetail(); });
+
+    document.getElementById('entryForm').addEventListener('submit', async (ev)=>{
+      ev.preventDefault();
+      const desc = document.getElementById('eDesc').value.trim();
+      const cat = document.getElementById('eCat').value;
+      const amt = Number(document.getElementById('eAmt').value);
+      const workerSel = document.getElementById('eWorker').value;
+      const workerId = (cat==='ishchi' && workerSel && workerSel!=='__new__') ? workerSel : null;
+      const fileInput = document.getElementById('eReceipt');
+      const file = fileInput && fileInput.files && fileInput.files[0];
+      if(!amt || amt<=0 || !db) return;
+      const btn = ev.target.querySelector('button[type="submit"]');
+      if(btn) btn.disabled = true;
+      try{
+        let receiptId = null;
+        if(file && assetsCap){
+          try{ const up = await assetsCap.upload(file); receiptId = up.id; }
+          catch(e){ console.error('receipt upload error', e); }
+        }
+        if(editingEntryId){
+          const payload = { desc, cat, amount: amt, workerId: workerId || null };
+          if(receiptId) payload.receiptId = receiptId;
+          await db.collection('entries').doc(editingEntryId).update(payload);
+          editingEntryId = null;
+        } else {
+          const payload = {
+            objId: obj.id, desc, cat, amount: amt,
+            date: new Date().toISOString().slice(0,10),
+            createdAt: Date.now()
+          };
+          if(workerId) payload.workerId = workerId;
+          if(receiptId) payload.receiptId = receiptId;
+          await db.collection('entries').add(payload);
+        }
+        ev.target.reset();
+        renderDetail();
+      }catch(e){ console.error('save entry error', e); }
+      if(btn) btn.disabled = false;
+    });
+
+    panel.querySelectorAll('.entry .del[data-eid]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const eid = btn.getAttribute('data-eid');
+        askConfirm('Ushbu xarajatni o\'chirasizmi?', async ()=>{
+          if(!db) return;
+          try{ await db.collection('entries').doc(eid).delete(); }
+          catch(e){ console.error('delete entry error', e); }
+        });
+      });
+    });
+
+    panel.querySelectorAll('.entry .edit[data-eid]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        editingEntryId = btn.getAttribute('data-eid');
+        renderDetail();
+        const form = document.getElementById('entryForm');
+        if(form) form.scrollIntoView({ behavior:'smooth', block:'center' });
+      });
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', async (ev)=>{
+      ev.preventDefault();
+      const amt = Number(document.getElementById('pAmt').value);
+      const note = document.getElementById('pNote').value.trim();
+      if(!amt || amt<=0 || !db) return;
+      const btn = ev.target.querySelector('button[type="submit"]');
+      if(btn) btn.disabled = true;
+      try{
+        await db.collection('payments').add({
+          objId: obj.id, amount: amt, note,
+          date: new Date().toISOString().slice(0,10),
+          createdAt: Date.now()
+        });
+        ev.target.reset();
+      }catch(e){ console.error('add payment error', e); }
+      if(btn) btn.disabled = false;
+    });
+
+    panel.querySelectorAll('.entry .del[data-pid]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const pid = btn.getAttribute('data-pid');
+        askConfirm('Ushbu to\'lovni o\'chirasizmi?', async ()=>{
+          if(!db) return;
+          try{ await db.collection('payments').doc(pid).delete(); }
+          catch(e){ console.error('delete payment error', e); }
+        });
+      });
+    });
+  }
+
+  function renderWorkersModal(){
+    const list = document.getElementById('workersList');
+    if(!workers.length){
+      list.innerHTML = '<div class="empty-list">Hali ishchi yo\'q.</div>';
+      return;
+    }
+    // total paid per worker across every object's entries
+    const totals = new Map();
+    const counts = new Map();
+    rawEntries.forEach(e=>{
+      if(!e.workerId) return;
+      totals.set(e.workerId, (totals.get(e.workerId)||0) + (Number(e.amount)||0));
+      counts.set(e.workerId, (counts.get(e.workerId)||0) + 1);
+    });
+    list.innerHTML = workers.map(w=>{
+      const total = totals.get(w.id) || 0;
+      const count = counts.get(w.id) || 0;
+      return `<div class="worker-row" data-wid="${w.id}">
+        <div>
+          <div class="wname">${escapeHtml(w.name)}</div>
+          <div class="wmeta">${count} ta to'lov</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="wamt">${fmt(total)}</div>
+          <button class="del" data-wid="${w.id}" title="O'chirish">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('.del[data-wid]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const wid = btn.getAttribute('data-wid');
+        askConfirm("Ushbu ishchini ro'yxatdan o'chirasizmi? (unga bog'liq xarajatlar saqlanib qoladi)", async ()=>{
+          if(!db) return;
+          try{ await db.collection('workers').doc(wid).delete(); renderWorkersModal(); }
+          catch(e){ console.error('delete worker error', e); }
+        });
+      });
+    });
+  }
+
+  function renderAll(){
+    renderTotals();
+    renderObjList();
+    renderDetail();
+    if(document.getElementById('workersModal').open) renderWorkersModal();
+  }
+
+  // Add object modal
+  const addObjModal = document.getElementById('addObjModal');
+  document.getElementById('openAddObj').addEventListener('click', ()=>{
+    document.getElementById('newObjName').value='';
+    document.getElementById('newObjContract').value='';
+    document.getElementById('newObjSettlement').value='naqd';
+    document.getElementById('newObjVatPct').value='12';
+    document.getElementById('newObjVatWrap').style.display='none';
+    document.getElementById('newObjStatus').value='jarayonda';
+    addObjModal.showModal();
+    document.getElementById('newObjName').focus();
+  });
+  document.getElementById('newObjSettlement').addEventListener('change', (ev)=>{
+    document.getElementById('newObjVatWrap').style.display = ev.target.value==='nds' ? 'block' : 'none';
+  });
+  document.getElementById('cancelAddObj').addEventListener('click', ()=> addObjModal.close());
+  document.getElementById('saveAddObj').addEventListener('click', async ()=>{
+    const name = document.getElementById('newObjName').value.trim();
+    const contract = Number(document.getElementById('newObjContract').value)||0;
+    const settlementType = document.getElementById('newObjSettlement').value;
+    const vatPercent = settlementType==='nds' ? (Number(document.getElementById('newObjVatPct').value)||0) : null;
+    const status = document.getElementById('newObjStatus').value;
+    if(!name || !db) return;
+    const saveBtn = document.getElementById('saveAddObj');
+    saveBtn.disabled = true;
+    try{
+      const payload = { name, contract, settlementType, status, createdAt: Date.now() };
+      if(vatPercent!=null) payload.vatPercent = vatPercent;
+      const ref = await db.collection('objects').add(payload);
+      state.activeId = ref.id;
+      addObjModal.close();
+    }catch(e){ console.error('add object error', e); }
+    saveBtn.disabled = false;
+  });
+
+  // Confirm modal
+  const confirmModal = document.getElementById('confirmModal');
+  let confirmCb = null;
+  function askConfirm(text, cb){
+    document.getElementById('confirmText').textContent = text;
+    confirmCb = cb;
+    confirmModal.showModal();
+  }
+  document.getElementById('confirmCancel').addEventListener('click', ()=>{ confirmModal.close(); confirmCb=null; });
+  document.getElementById('confirmOk').addEventListener('click', ()=>{
+    confirmModal.close();
+    if(confirmCb) confirmCb();
+    confirmCb = null;
+  });
+
+  // Workers modal
+  const workersModal = document.getElementById('workersModal');
+  document.getElementById('openWorkersBtn').addEventListener('click', ()=>{
+    workersModal.showModal();
+    renderWorkersModal();
+  });
+  document.getElementById('closeWorkersBtn').addEventListener('click', ()=> workersModal.close());
+  document.getElementById('addWorkerForm').addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const input = document.getElementById('newWorkerName');
+    const name = input.value.trim();
+    if(!name || !db) return;
+    try{ await db.collection('workers').add({ name, createdAt: Date.now() }); input.value=''; }
+    catch(e){ console.error('add worker error', e); }
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  document.getElementById('exportAllBtn').addEventListener('click', exportOverallCsv);
+  function applyThemeLabel(){
+    const cur = document.documentElement.getAttribute('data-theme');
+    themeToggle.textContent = cur === 'dark' ? "Kunduzgi rejim" : "Tungi rejim";
+  }
+  themeToggle.addEventListener('click', ()=>{
+    const cur = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', cur==='dark' ? 'light' : 'dark');
+    applyThemeLabel();
+  });
+  applyThemeLabel();
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderAll();
+    initDb();
+  });
+})();
+</script>
+</body>
+</html>
