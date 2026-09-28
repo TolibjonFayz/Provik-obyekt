@@ -1,0 +1,13 @@
+{
+  "buildCommand": null,
+  "outputDirectory": null,
+  "framework": null,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@3"
+    }
+  }
+}
