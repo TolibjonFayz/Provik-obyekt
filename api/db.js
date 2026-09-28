@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 // Neon Database ga ulanish kodi
-const connectionString = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_zAs6HaRkhcf1@ep-summer-feather-b3q6g326-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+const connectionString = process.env.DATABASE_URL;
 
 const pool = new Pool({
   connectionString,
