@@ -342,67 +342,55 @@
   </div>
 </dialog>
 
-<script>
-  // Node.js server API'ga ulanish moduli
-  const API_URL = ''; // Masalan: http://localhost:3000 yoki o'z serveringiz manzili
-  
-  window.realDb = {
-    collection: (name) => {
-      return {
-        onSnapshot: (cb) => {
-          const poll = async () => {
-            try {
-              const res = await fetch(API_URL + '/api/' + name);
-              const col = await res.json();
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  // BU YERGA FIREBASE CONFIGINGIZNI QO'YING
+  const firebaseConfig = {
+    apiKey: "", // Masalan: "AIzaSy..."
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
+  };
+
+  if (firebaseConfig.apiKey) {
+    const app = initializeApp(firebaseConfig);
+    const firestoreDb = getFirestore(app);
+    
+    window.realDb = {
+      collection: (name) => {
+        const colRef = collection(firestoreDb, name);
+        return {
+          onSnapshot: (cb) => {
+            return onSnapshot(colRef, (snapshot) => {
               const data = {
-                docs: Object.keys(col).map(id => ({
-                  id,
-                  data: () => col[id]
+                docs: snapshot.docs.map(d => ({
+                  id: d.id,
+                  data: () => d.data()
                 }))
               };
               cb(data);
-            } catch (e) {
-              // Serverga ulanib bo'lmadi
-            }
-            setTimeout(poll, 2000); // Har 2 soniyada yangilab turadi (real-time uchun)
-          };
-          poll();
-          return () => {};
-        },
-        add: async (obj) => {
-          const res = await fetch(API_URL + '/api/' + name, {
-            method: 'POST',
-            body: JSON.stringify(obj),
-            headers: { 'Content-Type': 'application/json' }
-          });
-          return await res.json();
-        },
-        doc: (id) => {
-          return {
-            update: async (patch) => {
-              await fetch(API_URL + '/api/' + name + '/' + id, {
-                method: 'PUT',
-                body: JSON.stringify(patch),
-                headers: { 'Content-Type': 'application/json' }
-              });
-            },
-            set: async (obj) => {
-              await fetch(API_URL + '/api/' + name + '/' + id, {
-                method: 'PUT',
-                body: JSON.stringify(obj),
-                headers: { 'Content-Type': 'application/json' }
-              });
-            },
-            delete: async () => {
-              await fetch(API_URL + '/api/' + name + '/' + id, {
-                method: 'DELETE'
-              });
-            }
-          };
-        }
-      };
-    }
-  };
+            });
+          },
+          add: async (obj) => {
+            const docRef = await addDoc(colRef, obj);
+            return { id: docRef.id };
+          },
+          doc: (id) => {
+            const dRef = doc(firestoreDb, name, id);
+            return {
+              update: async (patch) => await updateDoc(dRef, patch),
+              set: async (obj) => await setDoc(dRef, obj),
+              delete: async () => await deleteDoc(dRef)
+            };
+          }
+        };
+      }
+    };
+  }
 </script>
 
 <script>
