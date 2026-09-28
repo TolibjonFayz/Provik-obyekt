@@ -342,55 +342,67 @@
   </div>
 </dialog>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  // BU YERGA FIREBASE CONFIGINGIZNI QO'YING
-  const firebaseConfig = {
-    apiKey: "", // Masalan: "AIzaSy..."
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
-  };
-
-  if (firebaseConfig.apiKey) {
-    const app = initializeApp(firebaseConfig);
-    const firestoreDb = getFirestore(app);
-    
-    window.realDb = {
-      collection: (name) => {
-        const colRef = collection(firestoreDb, name);
-        return {
-          onSnapshot: (cb) => {
-            return onSnapshot(colRef, (snapshot) => {
+<script>
+  // Vercel Serverless Function (Neon PostgreSQL API) ga ulanish
+  const API_URL = '/api/db'; 
+  
+  window.realDb = {
+    collection: (name) => {
+      return {
+        onSnapshot: (cb) => {
+          const poll = async () => {
+            try {
+              const res = await fetch(`${API_URL}?collection=${name}`);
+              const col = await res.json();
               const data = {
-                docs: snapshot.docs.map(d => ({
-                  id: d.id,
-                  data: () => d.data()
+                docs: Object.keys(col).map(id => ({
+                  id,
+                  data: () => col[id]
                 }))
               };
               cb(data);
-            });
-          },
-          add: async (obj) => {
-            const docRef = await addDoc(colRef, obj);
-            return { id: docRef.id };
-          },
-          doc: (id) => {
-            const dRef = doc(firestoreDb, name, id);
-            return {
-              update: async (patch) => await updateDoc(dRef, patch),
-              set: async (obj) => await setDoc(dRef, obj),
-              delete: async () => await deleteDoc(dRef)
-            };
-          }
-        };
-      }
-    };
-  }
+            } catch (e) {
+              // Xatolik yuz berganda server javobini kutamiz
+            }
+            setTimeout(poll, 3000); // Har 3 soniyada ma'lumotlarni sinxronizatsiya qiladi
+          };
+          poll();
+          return () => {};
+        },
+        add: async (obj) => {
+          const res = await fetch(`${API_URL}?collection=${name}`, {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          return await res.json();
+        },
+        doc: (id) => {
+          return {
+            update: async (patch) => {
+              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(patch),
+                headers: { 'Content-Type': 'application/json' }
+              });
+            },
+            set: async (obj) => {
+              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(obj),
+                headers: { 'Content-Type': 'application/json' }
+              });
+            },
+            delete: async () => {
+              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+                method: 'DELETE'
+              });
+            }
+          };
+        }
+      };
+    }
+  };
 </script>
 
 <script>

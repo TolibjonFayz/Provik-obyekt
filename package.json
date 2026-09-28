@@ -1,0 +1,8 @@
+{
+  "name": "provik-hisob-neon",
+  "version": "1.0.0",
+  "description": "Provik Obyektlar Hisobi - Neon DB Backend",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
