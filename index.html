@@ -4,281 +4,471 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PROVIK — Obyektlar hisobi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #EFF2F0;
+    --bg: #F8F9FB;
+    --bg-subtle: #F0F2F5;
     --panel: #FFFFFF;
-    --ink: #17201D;
-    --ink-soft: #55635C;
-    --line: #D8DED9;
-    --teal: #0E6E76;
-    --teal-deep: #0A4E54;
-    --amber: #C9821A;
-    --red: #B4472E;
-    --green: #2F7D4F;
-    --shadow: 0 1px 2px rgba(23,32,29,0.06);
-    box-sizing: border-box;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --ink: #1A1D21;
+    --ink-secondary: #6B7280;
+    --ink-tertiary: #9CA3AF;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+    --primary-light: #EFF6FF;
+    --primary-ghost: rgba(37,99,235,0.06);
+    --success: #059669;
+    --success-light: #ECFDF5;
+    --danger: #DC2626;
+    --danger-light: #FEF2F2;
+    --warning: #D97706;
+    --warning-light: #FFFBEB;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg: #12181A;
-      --panel: #1A2224;
-      --ink: #E7EEEA;
-      --ink-soft: #9AABA3;
-      --line: #2A3538;
-      --teal: #3FA7AE;
-      --teal-deep: #2C7E85;
-      --amber: #E0A344;
-      --red: #E07A5F;
-      --green: #5FBE85;
-      --shadow: 0 1px 2px rgba(0,0,0,0.35);
+      --bg: #0F1117;
+      --bg-subtle: #181B23;
+      --panel: #1E2028;
+      --ink: #F0F1F3;
+      --ink-secondary: #9CA3AF;
+      --ink-tertiary: #6B7280;
+      --border: #2D3039;
+      --border-light: #252830;
+      --primary: #3B82F6;
+      --primary-hover: #60A5FA;
+      --primary-light: rgba(59,130,246,0.12);
+      --primary-ghost: rgba(59,130,246,0.06);
+      --success: #34D399;
+      --success-light: rgba(52,211,153,0.12);
+      --danger: #F87171;
+      --danger-light: rgba(248,113,113,0.12);
+      --warning: #FBBF24;
+      --warning-light: rgba(251,191,36,0.12);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
     }
   }
   :root[data-theme="dark"]{
-    --bg: #12181A;
-    --panel: #1A2224;
-    --ink: #E7EEEA;
-    --ink-soft: #9AABA3;
-    --line: #2A3538;
-    --teal: #3FA7AE;
-    --teal-deep: #2C7E85;
-    --amber: #E0A344;
-    --red: #E07A5F;
-    --green: #5FBE85;
-    --shadow: 0 1px 2px rgba(0,0,0,0.35);
+    --bg: #0F1117;
+    --bg-subtle: #181B23;
+    --panel: #1E2028;
+    --ink: #F0F1F3;
+    --ink-secondary: #9CA3AF;
+    --ink-tertiary: #6B7280;
+    --border: #2D3039;
+    --border-light: #252830;
+    --primary: #3B82F6;
+    --primary-hover: #60A5FA;
+    --primary-light: rgba(59,130,246,0.12);
+    --primary-ghost: rgba(59,130,246,0.06);
+    --success: #34D399;
+    --success-light: rgba(52,211,153,0.12);
+    --danger: #F87171;
+    --danger-light: rgba(248,113,113,0.12);
+    --warning: #FBBF24;
+    --warning-light: rgba(251,191,36,0.12);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
   }
-  html{ scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
-  *{ box-sizing: border-box; }
+  html{ height:100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *{ box-sizing:border-box; margin:0; padding:0; }
   body{
-    height: 100%;
-    margin:0;
+    height:100%;
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
   }
-  .wrap{ max-width: 1040px; margin: 0 auto; padding: 28px 20px 64px; }
 
-  .top{
-    display:flex; align-items:baseline; justify-content:space-between; gap: 12px;
-    margin-bottom: 22px; flex-wrap: wrap;
+  /* ─── HEADER ─── */
+  .header{
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--panel) 85%, transparent);
   }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand svg{ flex-shrink:0; }
-  h1{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 26px; font-weight: 700; margin:0; letter-spacing: -0.01em;
+  .header-inner{
+    max-width: 1280px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap;
   }
-  .sub{ color: var(--ink-soft); font-size: 13px; margin-top: 2px; }
+  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo-icon{
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), #7C3AED);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 16px;
+  }
+  .logo-text{ font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .logo-sub{ font-size: 12px; color: var(--ink-tertiary); font-weight: 400; }
+  .header-actions{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .header-actions .hbtn{
+    background: var(--bg-subtle); color: var(--ink-secondary); border: none;
+    border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12.5px;
+    font-weight: 500; cursor: pointer; transition: var(--transition);
+    font-family: inherit; display:flex; align-items:center; gap:5px;
+  }
+  .header-actions .hbtn:hover{ background: var(--primary-light); color: var(--primary); }
+  .header-actions .hbtn svg{ width:14px; height:14px; }
 
-  .totals{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;
-  }
-  .tcard{
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    padding: 14px 16px; box-shadow: var(--shadow);
-  }
-  .tcard .lbl{ font-size: 12.5px; color: var(--ink-soft); }
-  .tcard .val{ font-size: 21px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
-  .tcard.profit .val{ color: var(--teal-deep); }
-  .tcard.profit.neg .val{ color: var(--red); }
+  /* ─── MAIN WRAP ─── */
+  .wrap{ max-width: 1280px; margin: 0 auto; padding: 24px 24px 80px; }
+  @media (max-width: 640px){ .wrap{ padding: 16px 16px 64px; } }
 
-  .layout{ display:grid; grid-template-columns: 260px 1fr; gap: 18px; align-items: start; }
-  @media (max-width: 720px){ .layout{ grid-template-columns: 1fr; } }
+  /* ─── STAT CARDS ─── */
+  .stats-grid{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px){ .stats-grid{ grid-template-columns: 1fr; gap: 10px; } }
+  .scard{
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 20px;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .scard::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+  .scard:nth-child(1)::before{ background: var(--primary); }
+  .scard:nth-child(2)::before{ background: var(--danger); }
+  .scard:nth-child(3)::before{ background: var(--success); }
+  .scard .s-label{ font-size: 12px; color: var(--ink-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .scard .s-value{ font-size: 24px; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .scard:nth-child(1) .s-value{ color: var(--primary); }
+  .scard:nth-child(2) .s-value{ color: var(--danger); }
+  .scard:nth-child(3) .s-value{ color: var(--success); }
+  .scard.profit.neg .s-value{ color: var(--danger) !important; }
 
+  /* ─── LAYOUT ─── */
+  .layout{
+    display: grid; grid-template-columns: 300px 1fr; gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 860px){ .layout{ grid-template-columns: 1fr; } }
+
+  /* ─── PANELS ─── */
   .panel{
-    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-    box-shadow: var(--shadow); overflow: hidden;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+    overflow: hidden;
   }
-  .panel-pad{ padding: 16px; }
 
-  .objlist-head{
+  /* ─── OBJECT LIST ─── */
+  .objlist-header{
     display:flex; justify-content:space-between; align-items:center;
-    padding: 14px 16px 8px;
+    padding: 16px 20px 12px;
   }
-  .objlist-head h2{ font-size: 14px; margin:0; color: var(--ink-soft); font-weight: 600; text-transform: none; }
+  .objlist-header h2{
+    font-size: 13px; font-weight: 600; color: var(--ink-tertiary);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
   .add-btn{
-    background: var(--teal); color:#fff; border:none; border-radius: 8px;
-    width: 26px; height: 26px; font-size: 17px; cursor:pointer; line-height:1;
+    background: var(--primary); color:#fff; border:none;
+    border-radius: var(--radius-sm);
+    width: 30px; height: 30px; font-size: 18px; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
+    transition: var(--transition); font-weight: 400;
   }
-  .add-btn:hover{ background: var(--teal-deep); }
+  .add-btn:hover{ background: var(--primary-hover); transform: scale(1.05); }
 
   .obj-item{
-    padding: 12px 16px; border-top: 1px solid var(--line); cursor:pointer;
-    display:flex; flex-direction:column; gap:3px;
+    padding: 14px 20px; border-top: 1px solid var(--border-light);
+    cursor:pointer; transition: var(--transition);
+    display:flex; flex-direction:column; gap:6px;
   }
-  .obj-item:hover{ background: color-mix(in srgb, var(--teal) 6%, transparent); }
-  .obj-item.active{ background: color-mix(in srgb, var(--teal) 12%, transparent); border-left: 3px solid var(--teal); padding-left: 13px; }
-  .obj-item .name{ font-weight: 600; font-size: 14.5px; }
-  .obj-item .meta{ font-size: 12px; color: var(--ink-soft); display:flex; justify-content:space-between; }
-  .obj-item .meta .p{ font-weight: 600; }
-  .obj-item .meta .p.neg{ color: var(--red); }
-  .obj-item .meta .p.pos{ color: var(--green); }
-  .badge{ font-size:10.5px; border-radius:4px; padding:1px 5px; white-space:nowrap; }
-  .badge.status-jarayonda{ color: var(--teal-deep); border:1px solid var(--teal); }
-  .badge.status-tugallangan{ color: var(--green); border:1px solid var(--green); }
-  .badge.status-toxtatilgan{ color: var(--red); border:1px solid var(--red); }
-  .badge.nds{ color: var(--amber); border:1px solid var(--amber); }
-  .badge.naqd{ color: var(--ink-soft); border:1px solid var(--line); }
+  .obj-item:hover{ background: var(--primary-ghost); }
+  .obj-item.active{
+    background: var(--primary-light);
+    border-left: 3px solid var(--primary);
+    padding-left: 17px;
+  }
+  .obj-item .name{
+    font-weight: 600; font-size: 14px;
+    display:flex; align-items:center; gap:8px; justify-content:space-between; flex-wrap:wrap;
+  }
+  .obj-item .meta{
+    font-size: 12px; color: var(--ink-tertiary);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .obj-item .meta .p{ font-weight: 700; font-size: 13px; }
+  .obj-item .meta .p.neg{ color: var(--danger); }
+  .obj-item .meta .p.pos{ color: var(--success); }
 
-  .empty-list{ padding: 18px 16px; color: var(--ink-soft); font-size: 13.5px; }
+  /* ─── BADGES ─── */
+  .badge{
+    font-size: 10px; font-weight: 600; border-radius: 6px;
+    padding: 2px 8px; white-space:nowrap; text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge.status-jarayonda{ color: var(--primary); background: var(--primary-light); }
+  .badge.status-tugallangan{ color: var(--success); background: var(--success-light); }
+  .badge.status-toxtatilgan{ color: var(--danger); background: var(--danger-light); }
+  .badge.nds{ color: var(--warning); background: var(--warning-light); }
+  .badge.naqd{ color: var(--ink-tertiary); background: var(--bg-subtle); }
 
+  .empty-list{ padding: 24px 20px; color: var(--ink-tertiary); font-size: 13px; text-align:center; }
+
+  /* ─── DETAIL ─── */
   .detail-head{
-    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
-    display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;
+    padding: 24px 24px 20px; border-bottom: 1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;
   }
-  .detail-head h2{ font-size: 19px; margin:0 0 4px; }
-  .detail-head .contract{ font-size: 13px; color: var(--ink-soft); }
+  .detail-head h2{ font-size: 20px; font-weight: 700; margin:0 0 4px; letter-spacing: -0.02em; }
+  .detail-head .contract{ font-size: 13px; color: var(--ink-secondary); }
+
   .icon-btn{
-    background:none; border:1px solid var(--line); color: var(--ink-soft);
-    border-radius: 7px; padding: 5px 9px; font-size: 12.5px; cursor:pointer;
+    background: var(--bg-subtle); border: none; color: var(--ink-secondary);
+    border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12px;
+    cursor:pointer; transition: var(--transition); font-weight: 500; font-family: inherit;
   }
-  .icon-btn:hover{ border-color: var(--red); color: var(--red); }
+  .icon-btn:hover{ background: var(--danger-light); color: var(--danger); }
+
   select.status-select{
-    border:1px solid var(--line); background: var(--bg); color:var(--ink);
-    border-radius:7px; padding:5px 8px; font-size:12.5px; font-family:inherit;
+    border: 1px solid var(--border); background: var(--bg-subtle); color: var(--ink);
+    border-radius: var(--radius-sm); padding: 7px 10px; font-size: 12px;
+    font-family: inherit; font-weight: 500; cursor:pointer;
   }
 
-  .stat-row{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-  .stat{ text-align:left; }
-  .stat .lbl{ font-size: 11.5px; color: var(--ink-soft); }
-  .stat .val{ font-size: 17px; font-weight:700; margin-top:2px; font-variant-numeric: tabular-nums; }
-  .stat.income .val{ color: var(--green); }
-  .stat.expense .val{ color: var(--red); }
-  .stat.profit .val{ color: var(--teal-deep); }
-  .stat.profit.neg .val{ color: var(--red); }
+  /* ─── STAT ROW ─── */
+  .stat-row{
+    display:grid; grid-template-columns: repeat(3,1fr); gap:12px;
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+  }
+  .stat .lbl{ font-size: 11px; color: var(--ink-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat .val{ font-size: 18px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .stat.income .val{ color: var(--primary); }
+  .stat.expense .val{ color: var(--danger); }
+  .stat.profit .val{ color: var(--success); }
+  .stat.profit.neg .val{ color: var(--danger); }
 
-  .cat-bars{ padding: 14px 18px; border-bottom: 1px solid var(--line); display:flex; flex-direction:column; gap:8px; }
-  .cat-bar-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; }
-  .cat-bar-row .cn{ width: 150px; flex-shrink:0; color: var(--ink-soft); }
-  .cat-bar-row .track{ flex:1; height:7px; background: var(--line); border-radius:4px; overflow:hidden; }
-  .cat-bar-row .fill{ height:100%; border-radius:4px; }
-  .cat-bar-row .amt{ width: 100px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; }
+  /* ─── CATEGORY BARS ─── */
+  .cat-bars{ padding: 16px 24px; border-bottom: 1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
+  .cat-bar-row{ display:flex; align-items:center; gap:12px; font-size: 12px; }
+  .cat-bar-row .cn{ width: 160px; flex-shrink:0; color: var(--ink-secondary); font-weight: 500; }
+  .cat-bar-row .track{ flex:1; height: 6px; background: var(--bg-subtle); border-radius: 100px; overflow:hidden; }
+  .cat-bar-row .fill{ height:100%; border-radius: 100px; transition: width 0.5s ease; }
+  .cat-bar-row .amt{ width: 110px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink-secondary); }
 
+  /* ─── SECTIONS ─── */
   .section-title{
-    padding: 12px 18px 4px; font-size: 12.5px; color: var(--ink-soft); font-weight:600;
-    border-top: 1px solid var(--line);
+    padding: 16px 24px 8px; font-size: 11px; color: var(--ink-tertiary);
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    border-top: 1px solid var(--border);
   }
 
-  .payment-bar-wrap{ padding: 4px 18px 14px; }
-  .payment-track{ height:8px; background:var(--line); border-radius:5px; overflow:hidden; }
-  .payment-fill{ height:100%; background:var(--green); border-radius:5px; }
-  .payment-caption{ font-size:12px; color:var(--ink-soft); margin-top:6px; display:flex; justify-content:space-between; }
+  /* ─── PAYMENT BAR ─── */
+  .payment-bar-wrap{ padding: 6px 24px 16px; }
+  .payment-track{ height: 8px; background: var(--bg-subtle); border-radius: 100px; overflow:hidden; }
+  .payment-fill{ height:100%; background: linear-gradient(90deg, var(--success), #34D399); border-radius: 100px; transition: width 0.5s ease; }
+  .payment-caption{ font-size: 12px; color: var(--ink-tertiary); margin-top: 8px; display:flex; justify-content:space-between; font-weight: 500; }
 
+  /* ─── FORMS ─── */
   form.entry-form, form.inline-form{
-    padding: 14px 18px; border-bottom: 1px solid var(--line);
-    display:grid; grid-template-columns: 1.3fr 1fr 1fr auto; gap: 8px; align-items:end;
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display:grid; grid-template-columns: 1.3fr 1fr 1fr auto; gap: 10px; align-items:end;
   }
   form.inline-form{ grid-template-columns: 1fr 1fr auto; border-bottom:none; padding-top:8px; }
   @media (max-width: 640px){ form.entry-form, form.inline-form{ grid-template-columns: 1fr 1fr; } }
-  form.entry-form label, form.inline-form label{ font-size: 11.5px; color: var(--ink-soft); display:block; margin-bottom:3px; }
-  form.entry-form select, form.entry-form input, form.inline-form select, form.inline-form input{
-    width:100%; padding: 8px 9px; border-radius: 7px; border: 1px solid var(--line);
-    background: var(--bg); color: var(--ink); font-size: 13.5px; font-family: inherit;
+  form.entry-form label, form.inline-form label{
+    font-size: 11px; color: var(--ink-tertiary); display:block; margin-bottom:4px;
+    font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
   }
-  form.entry-form select:focus, form.entry-form input:focus{ outline: 2px solid var(--teal); outline-offset:1px; }
+  form.entry-form select, form.entry-form input,
+  form.inline-form select, form.inline-form input{
+    width:100%; padding: 9px 12px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--bg-subtle);
+    color: var(--ink); font-size: 13px; font-family: inherit;
+    transition: var(--transition);
+  }
+  form.entry-form select:focus, form.entry-form input:focus,
+  form.inline-form select:focus, form.inline-form input:focus{
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  }
   form.entry-form button, form.inline-form button{
-    background: var(--teal); color:#fff; border:none; border-radius:7px;
-    padding: 8px 14px; font-size: 13.5px; font-weight:600; cursor:pointer; white-space:nowrap;
+    background: var(--primary); color:#fff; border:none;
+    border-radius: var(--radius-sm); padding: 9px 18px; font-size: 13px;
+    font-weight: 600; cursor:pointer; white-space:nowrap;
+    transition: var(--transition); font-family: inherit;
   }
-  form.entry-form button:hover, form.inline-form button:hover{ background: var(--teal-deep); }
-  form.entry-form button.cancel-edit{ background:none; border:1px solid var(--line); color:var(--ink-soft); }
+  form.entry-form button:hover, form.inline-form button:hover{
+    background: var(--primary-hover); transform: translateY(-1px);
+  }
+  form.entry-form button.cancel-edit{
+    background:none; border:1px solid var(--border); color:var(--ink-secondary);
+  }
 
+  /* ─── ENTRIES ─── */
   .entries{ max-height: 380px; overflow-y:auto; }
+  .entries::-webkit-scrollbar{ width: 4px; }
+  .entries::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 100px; }
   .entry{
-    padding: 10px 18px; border-bottom: 1px solid var(--line);
-    display:flex; justify-content:space-between; align-items:center; gap: 10px; font-size: 13.5px;
+    padding: 12px 24px; border-bottom: 1px solid var(--border-light);
+    display:flex; justify-content:space-between; align-items:center; gap: 12px;
+    font-size: 13px; transition: var(--transition);
   }
-  .entry .left{ display:flex; flex-direction:column; gap:2px; min-width:0; }
-  .entry .desc{ font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .entry .tag{ font-size: 11px; color: var(--ink-soft); display:flex; gap:6px; align-items:center; }
-  .entry .dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .entry:hover{ background: var(--bg-subtle); }
+  .entry .left{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .entry .desc{ font-weight: 600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .entry .tag{ font-size: 11px; color: var(--ink-tertiary); display:flex; gap:6px; align-items:center; }
+  .entry .dot{ width: 6px; height: 6px; border-radius: 50%; flex-shrink:0; }
   .entry .right{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
-  .entry .amt{ font-variant-numeric: tabular-nums; font-weight:600; }
-  .entry .amt.income{ color: var(--green); }
-  .entry .amt.expense{ color: var(--red); }
-  .entry .edit, .entry .del{ background:none; border:none; color: var(--ink-soft); cursor:pointer; font-size:14px; padding:2px 4px; }
-  .entry .del:hover{ color: var(--red); }
-  .entry .edit:hover{ color: var(--teal); }
+  .entry .amt{ font-variant-numeric: tabular-nums; font-weight: 700; }
+  .entry .amt.income{ color: var(--success); }
+  .entry .amt.expense{ color: var(--danger); }
+  .entry .edit, .entry .del{
+    background:none; border:none; color: var(--ink-tertiary); cursor:pointer;
+    font-size: 13px; padding: 4px 6px; border-radius: 6px;
+    transition: var(--transition); opacity: 0.6;
+  }
+  .entry:hover .edit, .entry:hover .del{ opacity: 1; }
+  .entry .del:hover{ color: var(--danger); background: var(--danger-light); }
+  .entry .edit:hover{ color: var(--primary); background: var(--primary-light); }
 
+  /* ─── EMPTY STATE ─── */
   .empty-state{
-    padding: 60px 24px; text-align:center; color: var(--ink-soft);
+    padding: 80px 24px; text-align:center; color: var(--ink-tertiary);
   }
-  .empty-state .big{ font-size: 15px; color: var(--ink); font-weight:600; margin-bottom:6px; }
+  .empty-state .big{
+    font-size: 16px; color: var(--ink-secondary); font-weight: 600; margin-bottom:8px;
+  }
 
+  /* ─── MODALS ─── */
   dialog.modal{
-    border:none; border-radius: 12px; padding:0; max-width: 420px; width: calc(100% - 40px);
-    background: var(--panel); color: var(--ink); box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    border:none; border-radius: var(--radius-xl); padding:0;
+    max-width: 440px; width: calc(100% - 32px);
+    background: var(--panel); color: var(--ink);
+    box-shadow: var(--shadow-lg);
   }
-  dialog.modal::backdrop{ background: rgba(10,15,14,0.45); }
-  .modal-pad{ padding: 20px; max-height: 80vh; overflow-y:auto; }
-  .modal-pad h3{ margin:0 0 14px; font-size:16px; }
-  .modal-pad label{ font-size:12.5px; color:var(--ink-soft); display:block; margin: 10px 0 4px; }
+  dialog.modal::backdrop{
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+  }
+  .modal-pad{ padding: 28px; max-height: 80vh; overflow-y:auto; }
+  .modal-pad h3{ margin:0 0 20px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .modal-pad label{
+    font-size: 11px; color: var(--ink-tertiary); display:block; margin: 14px 0 4px;
+    font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+  }
   .modal-pad input, .modal-pad select{
-    width:100%; padding: 9px 10px; border-radius: 7px; border: 1px solid var(--line);
-    background: var(--bg); color: var(--ink); font-size: 14px; font-family: inherit;
+    width:100%; padding: 10px 12px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--bg-subtle);
+    color: var(--ink); font-size: 14px; font-family: inherit;
+    transition: var(--transition);
   }
-  .modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
-  .btn-ghost{ background:none; border:1px solid var(--line); color:var(--ink-soft); border-radius:7px; padding:8px 14px; font-size:13.5px; cursor:pointer; }
-  .btn-solid{ background: var(--teal); border:none; color:#fff; border-radius:7px; padding:8px 14px; font-size:13.5px; font-weight:600; cursor:pointer; }
-  .btn-solid:hover{ background: var(--teal-deep); }
+  .modal-pad input:focus, .modal-pad select:focus{
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
+  .btn-ghost{
+    background: var(--bg-subtle); border: none; color:var(--ink-secondary);
+    border-radius: var(--radius-sm); padding: 10px 18px; font-size: 13px;
+    cursor:pointer; font-weight: 500; font-family: inherit; transition: var(--transition);
+  }
+  .btn-ghost:hover{ background: var(--border); }
+  .btn-solid{
+    background: var(--primary); border:none; color:#fff;
+    border-radius: var(--radius-sm); padding: 10px 18px; font-size: 13px;
+    font-weight: 600; cursor:pointer; font-family: inherit; transition: var(--transition);
+  }
+  .btn-solid:hover{ background: var(--primary-hover); }
 
+  /* ─── WORKERS ─── */
   .worker-row{
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
-    padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px;
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: 13px;
   }
   .worker-row:last-child{ border-bottom:none; }
-  .worker-row .wname{ font-weight:600; }
-  .worker-row .wmeta{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
-  .worker-row .wamt{ font-weight:700; color: var(--amber); font-variant-numeric: tabular-nums; }
+  .worker-row .wname{ font-weight: 600; }
+  .worker-row .wmeta{ font-size: 11px; color: var(--ink-tertiary); margin-top:2px; }
+  .worker-row .wamt{ font-weight: 700; color: var(--warning); font-variant-numeric: tabular-nums; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar{ width: 6px; }
+  ::-webkit-scrollbar-track{ background: transparent; }
+  ::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 100px; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+  .panel{ animation: fadeIn 0.3s ease; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="top">
-    <div class="brand">
-      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="15" cy="15" r="14" stroke="var(--teal)" stroke-width="2"/>
-        <path d="M15 6 L15 24 M6 15 L24 15 M9.5 9.5 L20.5 20.5 M20.5 9.5 L9.5 20.5" stroke="var(--teal)" stroke-width="1.4" stroke-linecap="round"/>
-      </svg>
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">P</div>
       <div>
-        <h1>PROVIK — Obyektlar hisobi</h1>
-        <div class="sub">Har bir obyekt bo'yicha xarajat va foyda</div>
-        <div class="sub" id="storageNote" style="margin-top:2px;">Ma'lumotlar shu qurilmada saqlanadi. Sherik bilan almashish: «Zaxira saqlash» → yuborish → sherik «Zaxira yuklash».</div>
+        <div class="logo-text">PROVIK</div>
+        <div class="logo-sub">Obyektlar hisobi</div>
       </div>
     </div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="icon-btn" id="openWorkersBtn">Ishchilar</button>
-      <button class="icon-btn" id="exportAllBtn">Umumiy hisobot (CSV)</button>
-      <button class="icon-btn" id="backupBtn">Zaxira saqlash</button>
-      <button class="icon-btn" id="restoreBtn">Zaxira yuklash</button>
+    <div class="header-actions">
+      <button class="hbtn" id="openWorkersBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Ishchilar
+      </button>
+      <button class="hbtn" id="exportAllBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        CSV hisobot
+      </button>
+      <button class="hbtn" id="backupBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Zaxira
+      </button>
+      <button class="hbtn" id="restoreBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Yuklash
+      </button>
       <input type="file" id="restoreFile" accept=".json,application/json" style="display:none;">
-      <button class="icon-btn" id="themeToggle">Tungi rejim</button>
+      <button class="hbtn" id="themeToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Tungi rejim
+      </button>
     </div>
   </div>
+</div>
+<div id="storageNote" style="display:none;"></div>
 
-  <div class="totals">
-    <div class="tcard">
-      <div class="lbl">Jami kelishilgan summa</div>
-      <div class="val" id="totContract">0</div>
+<div class="wrap">
+  <div class="stats-grid">
+    <div class="scard">
+      <div class="s-label">Jami kelishilgan summa</div>
+      <div class="s-value" id="totContract">0</div>
     </div>
-    <div class="tcard">
-      <div class="lbl">Jami xarajat</div>
-      <div class="val" id="totExpense">0</div>
+    <div class="scard">
+      <div class="s-label">Jami xarajat</div>
+      <div class="s-value" id="totExpense">0</div>
     </div>
-    <div class="tcard profit">
-      <div class="lbl">Umumiy foyda</div>
-      <div class="val" id="totProfit">0</div>
+    <div class="scard profit">
+      <div class="s-label">Umumiy foyda</div>
+      <div class="s-value" id="totProfit">0</div>
     </div>
   </div>
 
   <div class="layout">
     <div class="panel">
-      <div class="objlist-head">
+      <div class="objlist-header">
         <h2>Obyektlar</h2>
         <button class="add-btn" id="openAddObj" title="Yangi obyekt">+</button>
       </div>
@@ -323,7 +513,7 @@
     <h3 id="confirmText">O'chirilsinmi?</h3>
     <div class="modal-actions">
       <button class="btn-ghost" id="confirmCancel">Bekor qilish</button>
-      <button class="btn-solid" id="confirmOk" style="background:var(--red);">O'chirish</button>
+      <button class="btn-solid" id="confirmOk" style="background:var(--danger);">O'chirish</button>
     </div>
   </div>
 </dialog>
@@ -331,7 +521,7 @@
 <dialog class="modal" id="workersModal">
   <div class="modal-pad">
     <h3>Ishchilar</h3>
-    <form id="addWorkerForm" style="display:flex; gap:8px; margin-bottom:12px;">
+    <form id="addWorkerForm" style="display:flex; gap:8px; margin-bottom:16px;">
       <input id="newWorkerName" type="text" placeholder="Ishchi ismi" style="flex:1;">
       <button class="btn-solid" type="submit">Qo'shish</button>
     </form>
@@ -361,10 +551,8 @@
                 }))
               };
               cb(data);
-            } catch (e) {
-              // Xatolik yuz berganda server javobini kutamiz
-            }
-            setTimeout(poll, 3000); // Har 3 soniyada ma'lumotlarni sinxronizatsiya qiladi
+            } catch (e) {}
+            setTimeout(poll, 3000);
           };
           poll();
           return () => {};
@@ -449,7 +637,7 @@
         const dl = await window.claude.use('downloads');
         if(dl){ await dl.save({ filename, data: text }); return; }
       }
-    }catch(e){ /* viewer declined or unavailable: fall through */ return; }
+    }catch(e){ return; }
     download(filename, text, mime);
   }
   window.__localUse = async function(cap){
@@ -458,7 +646,6 @@
     throw new Error('unavailable');
   };
 
-  // Zaxira nusxa: saqlash va birlashtirib yuklash
   const backupBtn = document.getElementById('backupBtn');
   const restoreBtn = document.getElementById('restoreBtn');
   const restoreFile = document.getElementById('restoreFile');
@@ -495,7 +682,7 @@
   window.addEventListener('load', () => {
     if(!persistent){
       const n = document.getElementById('storageNote');
-      if(n){ n.textContent = "Diqqat: brauzer ma'lumotni saqlamayapti. Faylni Chrome yoki Safari'da oching, aks holda yopganda hammasi o'chadi."; n.style.color = '#B5372C'; }
+      if(n){ n.textContent = "Diqqat: brauzer ma'lumotni saqlamayapti."; n.style.color = 'var(--danger)'; n.style.display = 'block'; }
     }
   });
 })();
@@ -503,30 +690,28 @@
 <script>
 (function(){
   const CATS = [
-    {id:'ventjihoz', name:"Ventilyatsiya jihozlari", color:'#0E6E76'},
-    {id:'kondit', name:"Konditsionerlar", color:'#2F7D4F'},
-    {id:'vrf', name:"VRF tizimi materiallari", color:'#3D6FB4'},
-    {id:'ishchi', name:"Ishchilarga pul", color:'#C9821A'},
-    {id:'dastavka', name:"Dastavka", color:'#8A5FB0'},
-    {id:'boshqa', name:"Boshqa xarajat", color:'#7A8A83'}
+    {id:'ventjihoz', name:"Ventilyatsiya jihozlari", color:'#2563EB'},
+    {id:'kondit', name:"Konditsionerlar", color:'#059669'},
+    {id:'vrf', name:"VRF tizimi materiallari", color:'#7C3AED'},
+    {id:'ishchi', name:"Ishchilarga pul", color:'#D97706'},
+    {id:'dastavka', name:"Dastavka", color:'#DC2626'},
+    {id:'boshqa', name:"Boshqa xarajat", color:'#6B7280'}
   ];
   const STATUS_LABELS = { jarayonda: 'Jarayonda', tugallangan: 'Tugallangan', toxtatilgan: "To'xtatilgan" };
 
-  // Shared state comes from the db capability so every teammate sees the
-  // same objects, entries, payments and workers, live.
   let state = { objects: [], activeId: null };
-  let workers = []; // {id, name}
+  let workers = [];
   let db = null;
   let assetsCap = null;
   let downloadsCap = null;
-  let dbStatus = 'connecting'; // 'connecting' | 'ready' | 'unavailable'
-  let filterMonth = ''; // '' = barchasi, else 'YYYY-MM'
+  let dbStatus = 'connecting';
+  let filterMonth = '';
   let editingEntryId = null;
 
-  const rawObjects = new Map();   // id -> {name, contract, settlementType, vatPercent, status, createdAt}
-  const rawEntries = new Map();   // id -> {objId, desc, cat, amount, date, workerId, receiptId, createdAt}
-  const rawPayments = new Map();  // id -> {objId, amount, date, note, createdAt}
-  const rawWorkers = new Map();   // id -> {name, createdAt}
+  const rawObjects = new Map();
+  const rawEntries = new Map();
+  const rawPayments = new Map();
+  const rawWorkers = new Map();
 
   function rebuildStateFromRaw(){
     const entriesByObj = new Map();
@@ -687,11 +872,11 @@
   function renderObjList(){
     const list = document.getElementById('objList');
     if(dbStatus === 'unavailable'){
-      list.innerHTML = '<div class="empty-list">Umumiy saqlash bu ko\'rinishda ishlamayapti. Sahifani qaytadan oching.</div>';
+      list.innerHTML = '<div class="empty-list">Saqlash tizimiga ulanib bo\'lmadi.</div>';
       return;
     }
     if(state.objects.length === 0){
-      list.innerHTML = '<div class="empty-list">Hali obyekt yo\'q. Yuqoridagi + tugmasi orqali qo\'shing.</div>';
+      list.innerHTML = '<div class="empty-list">Hali obyekt yo\'q.<br>Yuqoridagi <strong>+</strong> tugmasini bosing.</div>';
       return;
     }
     list.innerHTML = state.objects.map(o=>{
@@ -702,7 +887,7 @@
         : '<span class="badge naqd">Naqd</span>';
       const statusBadge = '<span class="badge status-' + o.status + '">' + (STATUS_LABELS[o.status]||o.status) + '</span>';
       return `<div class="obj-item ${o.id===state.activeId?'active':''}" data-id="${o.id}">
-        <div class="name" style="display:flex; align-items:center; gap:6px; justify-content:space-between; flex-wrap:wrap;"><span>${escapeHtml(o.name)}</span><span style="display:flex; gap:4px; flex-wrap:wrap;">${statusBadge}${typeBadge}</span></div>
+        <div class="name"><span>${escapeHtml(o.name)}</span><span style="display:flex; gap:4px; flex-wrap:wrap;">${statusBadge}${typeBadge}</span></div>
         <div class="meta"><span>${(o.entries||[]).length} ta xarajat</span><span class="p ${cls}">${fmt(t.profit)}</span></div>
       </div>`;
     }).join('');
@@ -757,7 +942,7 @@
       const cat = CATS.find(c=>c.id===e.cat) || CATS[CATS.length-1];
       const workerName = e.workerId ? (workers.find(w=>w.id===e.workerId)?.name) : null;
       const receipt = e.receiptId ? `<a href="/_blob/${e.receiptId}" target="_blank" rel="noopener" title="Chekni ko'rish" style="flex-shrink:0;">
-          <img src="/_blob/${e.receiptId}" alt="chek" style="width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--line);">
+          <img src="/_blob/${e.receiptId}" alt="chek" style="width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
         </a>` : '';
       return `<div class="entry" data-eid="${e.id}">
         <div class="left">
@@ -803,8 +988,8 @@
         </div>
       </div>
       <div class="stat-row">
-        <div class="stat income"><div class="lbl">Kelishilgan summa</div><div class="val">${fmt(t.contract)}</div></div>
-        <div class="stat expense"><div class="lbl">Jami xarajat</div><div class="val">${fmt(t.expense)}</div></div>
+        <div class="stat income"><div class="lbl">Kelishilgan</div><div class="val">${fmt(t.contract)}</div></div>
+        <div class="stat expense"><div class="lbl">Xarajat</div><div class="val">${fmt(t.expense)}</div></div>
         <div class="stat profit ${t.profit<0?'neg':''}"><div class="lbl">Foyda</div><div class="val">${fmt(t.profit)}</div></div>
       </div>
       ${catRows ? `<div class="cat-bars">${catRows}</div>` : ''}
@@ -850,22 +1035,21 @@
           <select id="eWorker">${workerOptionsHtml(editingEntry?editingEntry.workerId:null)}</select>
         </div>
         <div style="grid-column: 1 / -1;${assetsCap ? '' : 'display:none;'}">
-          <label for="eReceipt">Chek/rasm (ixtiyoriy)${assetsCap ? '' : ' — bu ko\'rinishda mavjud emas'}</label>
+          <label for="eReceipt">Chek/rasm (ixtiyoriy)</label>
           <input id="eReceipt" type="file" accept="image/*" ${assetsCap ? '' : 'disabled'} style="padding:4px 0; border:none; background:none;">
         </div>
         ${editingEntry ? `<button type="button" class="cancel-edit" id="cancelEditBtn" style="grid-column:1/-1;">Bekor qilish</button>` : ''}
       </form>
 
-      <div style="padding: 12px 18px; border-bottom: 1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <label for="filterMonthInput" style="font-size:12.5px; color:var(--ink-soft);">Oy bo'yicha hisobot:</label>
-        <input type="month" id="filterMonthInput" value="${filterMonth}" style="padding:6px 8px; border-radius:7px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font-size:13px;">
-        ${filterMonth ? `<button class="icon-btn" id="clearFilterBtn">Barchasi</button><span style="font-size:12.5px;color:var(--ink-soft);">Shu oyda xarajat: ${fmt(filteredExpense)}</span>` : ''}
-        <button class="icon-btn" id="exportObjBtn" style="margin-left:auto;" ${downloadsCap ? '' : 'disabled title="Bu ko\'rinishda mavjud emas"'}>CSV yuklab olish</button>
+      <div style="padding: 12px 24px; border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <label for="filterMonthInput" style="font-size:11px; color:var(--ink-tertiary); font-weight:500;">Oy bo'yicha:</label>
+        <input type="month" id="filterMonthInput" value="${filterMonth}" style="padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-subtle); color:var(--ink); font-size:12px; font-family:inherit;">
+        ${filterMonth ? `<button class="icon-btn" id="clearFilterBtn">Barchasi</button><span style="font-size:12px;color:var(--ink-tertiary);">Shu oyda: ${fmt(filteredExpense)}</span>` : ''}
+        <button class="icon-btn" id="exportObjBtn" style="margin-left:auto;" ${downloadsCap ? '' : 'disabled title="Mavjud emas"'}>CSV yuklab olish</button>
       </div>
       <div class="entries">${entriesHtml}</div>
     `;
 
-    // toggle worker field visibility based on selected category, live
     const catSelect = document.getElementById('eCat');
     const workerWrap = document.getElementById('workerFieldWrap');
     function syncWorkerVisibility(){
@@ -1010,7 +1194,6 @@
       list.innerHTML = '<div class="empty-list">Hali ishchi yo\'q.</div>';
       return;
     }
-    // total paid per worker across every object's entries
     const totals = new Map();
     const counts = new Map();
     rawEntries.forEach(e=>{
@@ -1035,7 +1218,7 @@
     list.querySelectorAll('.del[data-wid]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const wid = btn.getAttribute('data-wid');
-        askConfirm("Ushbu ishchini ro'yxatdan o'chirasizmi? (unga bog'liq xarajatlar saqlanib qoladi)", async ()=>{
+        askConfirm("Ushbu ishchini ro'yxatdan o'chirasizmi?", async ()=>{
           if(!db) return;
           try{ await db.collection('workers').doc(wid).delete(); renderWorkersModal(); }
           catch(e){ console.error('delete worker error', e); }
@@ -1122,7 +1305,9 @@
   document.getElementById('exportAllBtn').addEventListener('click', exportOverallCsv);
   function applyThemeLabel(){
     const cur = document.documentElement.getAttribute('data-theme');
-    themeToggle.textContent = cur === 'dark' ? "Kunduzgi rejim" : "Tungi rejim";
+    themeToggle.innerHTML = cur === 'dark'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Kunduzgi'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Tungi rejim';
   }
   themeToggle.addEventListener('click', ()=>{
     const cur = document.documentElement.getAttribute('data-theme');
