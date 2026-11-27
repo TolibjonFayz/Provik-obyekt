@@ -689,6 +689,41 @@
       const n = document.getElementById('storageNote');
       if(n){ n.textContent = "Diqqat: brauzer ma'lumotni saqlamayapti."; n.style.color = 'var(--danger)'; n.style.display = 'block'; }
     }
+    // localStorage'dagi eski ma'lumotlarni Neon bazasiga ko'chirish
+    const MIGRATED_KEY = 'provik_migrated_to_neon';
+    if(persistent && !localStorage.getItem(MIGRATED_KEY) && Object.keys(data).length > 0){
+      const hasAnyData = ['objects','entries','payments','workers'].some(col => data[col] && Object.keys(data[col]).length > 0);
+      if(hasAnyData){
+        const doMigrate = confirm("Brauzeringizda eski ma'lumotlar topildi (" +
+          Object.keys(data.objects||{}).length + " ta obyekt, " +
+          Object.keys(data.entries||{}).length + " ta xarajat). " +
+          "Ularni serverga ko'chirib o'tkazaymi?");
+        if(doMigrate){
+          (async function(){
+            let count = 0;
+            for(const colName of ['objects','entries','payments','workers']){
+              const col = data[colName];
+              if(!col) continue;
+              for(const [id, doc] of Object.entries(col)){
+                try{
+                  await fetch('/api/db?collection=' + colName + '&id=' + id, {
+                    method: 'PUT',
+                    body: JSON.stringify(doc),
+                    headers: { 'Content-Type': 'application/json' }
+                  });
+                  count++;
+                }catch(e){ console.error('Migration error', colName, id, e); }
+              }
+            }
+            localStorage.setItem(MIGRATED_KEY, Date.now().toString());
+            alert("Tayyor! " + count + " ta yozuv serverga ko'chirildi. Sahifa yangilanadi.");
+            location.reload();
+          })();
+        } else {
+          localStorage.setItem(MIGRATED_KEY, 'skipped');
+        }
+      }
+    }
   });
 })();
 </script>
