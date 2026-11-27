@@ -539,22 +539,28 @@
     collection: (name) => {
       return {
         onSnapshot: (cb) => {
+          let timer = null;
           const poll = async () => {
             try {
               const res = await fetch(`${API_URL}?collection=${name}`);
+              if (!res.ok) { console.error('API error', name, res.status); timer = setTimeout(poll, 5000); return; }
               const col = await res.json();
-              const data = {
-                docs: Object.keys(col).map(id => ({
-                  id,
-                  data: () => col[id]
-                }))
-              };
-              cb(data);
-            } catch (e) {}
-            setTimeout(poll, 3000);
+              if (col && !col.error) {
+                const data = {
+                  docs: Object.keys(col).map(id => ({
+                    id,
+                    data: () => col[id]
+                  }))
+                };
+                cb(data);
+              } else {
+                console.error('API returned error', name, col);
+              }
+            } catch (e) { console.error('Poll error', name, e); }
+            timer = setTimeout(poll, 3000);
           };
           poll();
-          return () => {};
+          return () => { if(timer) clearTimeout(timer); };
         },
         add: async (obj) => {
           const res = await fetch(`${API_URL}?collection=${name}`, {

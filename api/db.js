@@ -3,8 +3,16 @@ const { Pool } = require('pg');
 // Neon Database ga ulanish kodi
 const connectionString = process.env.DATABASE_URL;
 
+if (!connectionString) {
+  console.error('DATABASE_URL environment variable is not set!');
+}
+
 const pool = new Pool({
   connectionString,
+  ssl: { rejectUnauthorized: false },
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+  max: 5
 });
 
 // Jadval (table) yaratilganligini kuzatuvchi o'zgaruvchi
