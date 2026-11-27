@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PROVIK — Obyektlar hisobi</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='10' fill='%232563EB'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='800' font-size='20'>P</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -657,7 +658,8 @@
   if(backupBtn) backupBtn.addEventListener('click', () => {
     const d = new Date(); const p = n => String(n).padStart(2, '0');
     const name = 'PROVIK_zaxira_' + d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + '.json';
-    saveFile(name, JSON.stringify(data), 'application/json');
+    const exportObj = typeof window.__getExportData === 'function' ? window.__getExportData() : data;
+    saveFile(name, JSON.stringify(exportObj), 'application/json');
   });
   if(restoreBtn && restoreFile){
     restoreBtn.addEventListener('click', () => restoreFile.click());
@@ -665,19 +667,31 @@
       const f = restoreFile.files && restoreFile.files[0];
       if(!f) return;
       const r = new FileReader();
-      r.onload = () => {
+      r.onload = async () => {
         try{
           const inc = JSON.parse(r.result);
           if(!inc || typeof inc !== 'object') throw new Error('bad');
           let n = 0;
-          ['objects','entries','payments','workers'].forEach(name => {
-            const col = inc[name]; if(!col || typeof col !== 'object') return;
-            data[name] = data[name] || {};
-            Object.keys(col).forEach(id => { data[name][id] = col[id]; n++; });
-          });
-          save();
-          ['objects','entries','payments','workers'].forEach(notify);
-          alert("Zaxira birlashtirildi: " + n + " ta yozuv qo'shildi/yangilandi.");
+          if(window.realDb){
+            for(const name of ['objects','entries','payments','workers']){
+              const col = inc[name]; if(!col || typeof col !== 'object') continue;
+              for(const id of Object.keys(col)){
+                await window.realDb.collection(name).doc(id).set(col[id]);
+                n++;
+              }
+            }
+            alert("Zaxira serverga yuklandi: " + n + " ta yozuv qo'shildi/yangilandi.");
+            location.reload();
+          } else {
+            ['objects','entries','payments','workers'].forEach(name => {
+              const col = inc[name]; if(!col || typeof col !== 'object') return;
+              data[name] = data[name] || {};
+              Object.keys(col).forEach(id => { data[name][id] = col[id]; n++; });
+            });
+            save();
+            ['objects','entries','payments','workers'].forEach(notify);
+            alert("Zaxira birlashtirildi: " + n + " ta yozuv qo'shildi/yangilandi.");
+          }
         }catch(e){ alert("Fayl noto'g'ri. PROVIK zaxira faylini (.json) tanlang."); }
         restoreFile.value = '';
       };
@@ -756,6 +770,15 @@
   const rawEntries = new Map();
   const rawPayments = new Map();
   const rawWorkers = new Map();
+
+  window.__getExportData = function(){
+    return {
+      objects: Object.fromEntries(rawObjects),
+      entries: Object.fromEntries(rawEntries),
+      payments: Object.fromEntries(rawPayments),
+      workers: Object.fromEntries(rawWorkers)
+    };
+  };
 
   function rebuildStateFromRaw(){
     const entriesByObj = new Map();
