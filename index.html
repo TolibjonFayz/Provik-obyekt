@@ -7,13 +7,22 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='10' fill='%232563EB'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='800' font-size='20'>P</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme immediately to avoid flash
+  (function(){
+    try{
+      var t = localStorage.getItem('provik_theme');
+      if(t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    }catch(e){}
+  })();
+</script>
 <style>
   :root{
-    --bg: #F8F9FB;
-    --bg-subtle: #F0F2F5;
+    --bg: #F4F6FA;
+    --bg-subtle: #EDF0F5;
     --panel: #FFFFFF;
-    --ink: #1A1D21;
-    --ink-secondary: #6B7280;
+    --ink: #111827;
+    --ink-secondary: #4B5563;
     --ink-tertiary: #9CA3AF;
     --border: #E5E7EB;
     --border-light: #F3F4F6;
@@ -27,67 +36,67 @@
     --danger-light: #FEF2F2;
     --warning: #D97706;
     --warning-light: #FFFBEB;
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-    --shadow-lg: 0 12px 32px rgba(0,0,0,0.1);
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.03);
+    --shadow-md: 0 8px 24px rgba(15,23,42,0.06);
+    --shadow-lg: 0 20px 44px rgba(15,23,42,0.12);
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 22px;
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg: #0F1117;
-      --bg-subtle: #181B23;
-      --panel: #1E2028;
-      --ink: #F0F1F3;
+      --bg: #0B0E14;
+      --bg-subtle: #151922;
+      --panel: #1B1F2A;
+      --ink: #F3F4F6;
       --ink-secondary: #9CA3AF;
       --ink-tertiary: #6B7280;
-      --border: #2D3039;
-      --border-light: #252830;
+      --border: #282D3B;
+      --border-light: #222734;
       --primary: #3B82F6;
       --primary-hover: #60A5FA;
-      --primary-light: rgba(59,130,246,0.12);
-      --primary-ghost: rgba(59,130,246,0.06);
+      --primary-light: rgba(59,130,246,0.14);
+      --primary-ghost: rgba(59,130,246,0.07);
       --success: #34D399;
-      --success-light: rgba(52,211,153,0.12);
+      --success-light: rgba(52,211,153,0.14);
       --danger: #F87171;
-      --danger-light: rgba(248,113,113,0.12);
+      --danger-light: rgba(248,113,113,0.14);
       --warning: #FBBF24;
-      --warning-light: rgba(251,191,36,0.12);
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-      --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+      --warning-light: rgba(251,191,36,0.14);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.25);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+      --shadow-lg: 0 20px 48px rgba(0,0,0,0.5);
     }
   }
   :root[data-theme="dark"]{
-    --bg: #0F1117;
-    --bg-subtle: #181B23;
-    --panel: #1E2028;
-    --ink: #F0F1F3;
+    --bg: #0B0E14;
+    --bg-subtle: #151922;
+    --panel: #1B1F2A;
+    --ink: #F3F4F6;
     --ink-secondary: #9CA3AF;
     --ink-tertiary: #6B7280;
-    --border: #2D3039;
-    --border-light: #252830;
+    --border: #282D3B;
+    --border-light: #222734;
     --primary: #3B82F6;
     --primary-hover: #60A5FA;
-    --primary-light: rgba(59,130,246,0.12);
-    --primary-ghost: rgba(59,130,246,0.06);
+    --primary-light: rgba(59,130,246,0.14);
+    --primary-ghost: rgba(59,130,246,0.07);
     --success: #34D399;
-    --success-light: rgba(52,211,153,0.12);
+    --success-light: rgba(52,211,153,0.14);
     --danger: #F87171;
-    --danger-light: rgba(248,113,113,0.12);
+    --danger-light: rgba(248,113,113,0.14);
     --warning: #FBBF24;
-    --warning-light: rgba(251,191,36,0.12);
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-    --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+    --warning-light: rgba(251,191,36,0.14);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.25);
+    --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+    --shadow-lg: 0 20px 48px rgba(0,0,0,0.5);
   }
   html{ height:100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{
-    height:100%;
+    min-height:100%;
     background: var(--bg);
     color: var(--ink);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -95,75 +104,170 @@
     line-height: 1.5;
   }
 
+  /* ─── LOGIN SCREEN ─── */
+  .auth-screen{
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(37,99,235,0.12), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(124,58,237,0.10), transparent 45%),
+      var(--bg);
+  }
+  .auth-card{
+    width: 100%; max-width: 400px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.35s ease;
+  }
+  .auth-brand{
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    margin-bottom: 28px;
+  }
+  .auth-brand .logo-icon{
+    width: 52px; height: 52px; border-radius: 15px;
+    font-size: 22px; margin-bottom: 14px;
+    box-shadow: 0 10px 24px rgba(37,99,235,0.28);
+  }
+  .auth-brand h1{ font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .auth-brand p{ font-size: 13px; color: var(--ink-secondary); margin-top: 4px; }
+  .auth-field label{
+    display: block; font-size: 11px; font-weight: 600; color: var(--ink-tertiary);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .pass-wrap{ position: relative; }
+  .pass-wrap input{
+    width: 100%; padding: 12px 42px 12px 14px;
+    border-radius: var(--radius-sm); border: 1px solid var(--border);
+    background: var(--bg-subtle); color: var(--ink);
+    font-size: 14px; font-family: inherit; transition: var(--transition);
+  }
+  .pass-wrap input:focus{
+    outline: none; border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.14);
+  }
+  .pass-eye{
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--ink-tertiary);
+    cursor: pointer; padding: 4px; display: flex; align-items: center;
+  }
+  .pass-eye:hover{ color: var(--ink); }
+  .auth-err{
+    margin-top: 10px; padding: 9px 12px; border-radius: var(--radius-sm);
+    background: var(--danger-light); color: var(--danger);
+    font-size: 12.5px; font-weight: 500; display: none;
+  }
+  .auth-submit{
+    width: 100%; margin-top: 18px; padding: 12px;
+    background: linear-gradient(135deg, var(--primary), #4F46E5);
+    color: #fff; border: none; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: var(--transition);
+    box-shadow: 0 6px 18px rgba(37,99,235,0.25);
+  }
+  .auth-submit:hover{ transform: translateY(-1px); filter: brightness(1.06); }
+  .auth-submit:disabled{ opacity: 0.6; cursor: not-allowed; transform: none; }
+  .auth-note{
+    margin-top: 18px; text-align: center; font-size: 12px; color: var(--ink-tertiary);
+  }
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    20%,60%{ transform: translateX(-6px); }
+    40%,80%{ transform: translateX(6px); }
+  }
+  .shake{ animation: shake 0.35s ease; }
+
   /* ─── HEADER ─── */
   .header{
-    background: var(--panel);
     border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
+    padding: 14px 24px;
     position: sticky; top: 0; z-index: 50;
-    backdrop-filter: blur(12px);
-    background: color-mix(in srgb, var(--panel) 85%, transparent);
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--panel) 84%, transparent);
   }
   .header-inner{
     max-width: 1280px; margin: 0 auto;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     flex-wrap: wrap;
   }
-  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo{ display:flex; align-items:center; gap:11px; }
   .logo-icon{
-    width: 36px; height: 36px; border-radius: 10px;
+    width: 38px; height: 38px; border-radius: 11px;
     background: linear-gradient(135deg, var(--primary), #7C3AED);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-weight: 800; font-size: 16px;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.22);
   }
-  .logo-text{ font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .logo-text{ font-size: 18px; font-weight: 800; letter-spacing: -0.02em; display:flex; align-items:center; gap:8px; }
   .logo-sub{ font-size: 12px; color: var(--ink-tertiary); font-weight: 400; }
+  .sync-pill{
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600; padding: 2px 8px;
+    border-radius: 100px; background: var(--success-light); color: var(--success);
+  }
+  .sync-pill .sdot{ width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .sync-pill.err{ background: var(--danger-light); color: var(--danger); }
   .header-actions{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
   .header-actions .hbtn{
-    background: var(--bg-subtle); color: var(--ink-secondary); border: none;
+    background: var(--bg-subtle); color: var(--ink-secondary); border: 1px solid transparent;
     border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12.5px;
     font-weight: 500; cursor: pointer; transition: var(--transition);
-    font-family: inherit; display:flex; align-items:center; gap:5px;
+    font-family: inherit; display:flex; align-items:center; gap:6px;
   }
-  .header-actions .hbtn:hover{ background: var(--primary-light); color: var(--primary); }
-  .header-actions .hbtn svg{ width:14px; height:14px; }
+  .header-actions .hbtn:hover{
+    background: var(--primary-light); color: var(--primary);
+    border-color: rgba(37,99,235,0.18);
+  }
+  .header-actions .hbtn svg{ width:15px; height:15px; flex-shrink:0; }
 
   /* ─── MAIN WRAP ─── */
   .wrap{ max-width: 1280px; margin: 0 auto; padding: 24px 24px 80px; }
-  @media (max-width: 640px){ .wrap{ padding: 16px 16px 64px; } }
+  @media (max-width: 640px){ .wrap{ padding: 16px 14px 64px; } }
 
   /* ─── STAT CARDS ─── */
   .stats-grid{
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
   }
   @media (max-width: 640px){ .stats-grid{ grid-template-columns: 1fr; gap: 10px; } }
   .scard{
     background: var(--panel); border: 1px solid var(--border);
-    border-radius: var(--radius-md); padding: 20px;
+    border-radius: var(--radius-md); padding: 20px 22px;
     box-shadow: var(--shadow-sm); transition: var(--transition);
     position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
+  .scard:hover{ box-shadow: var(--shadow-md); transform: translateY(-1px); }
   .scard::before{
     content:''; position:absolute; top:0; left:0; right:0; height:3px;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
-  .scard:nth-child(1)::before{ background: var(--primary); }
-  .scard:nth-child(2)::before{ background: var(--danger); }
-  .scard:nth-child(3)::before{ background: var(--success); }
-  .scard .s-label{ font-size: 12px; color: var(--ink-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-  .scard .s-value{ font-size: 24px; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .scard:nth-child(1)::before{ background: linear-gradient(90deg, var(--primary), #60A5FA); }
+  .scard:nth-child(2)::before{ background: linear-gradient(90deg, var(--danger), #FB7185); }
+  .scard:nth-child(3)::before{ background: linear-gradient(90deg, var(--success), #34D399); }
+  .scard .s-label{ font-size: 11.5px; color: var(--ink-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .scard .s-value{ font-size: 23px; font-weight: 800; margin-top: 6px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
   .scard:nth-child(1) .s-value{ color: var(--primary); }
   .scard:nth-child(2) .s-value{ color: var(--danger); }
   .scard:nth-child(3) .s-value{ color: var(--success); }
   .scard.profit.neg .s-value{ color: var(--danger) !important; }
+  .scard-ico{
+    width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scard:nth-child(1) .scard-ico{ background: var(--primary-light); color: var(--primary); }
+  .scard:nth-child(2) .scard-ico{ background: var(--danger-light); color: var(--danger); }
+  .scard:nth-child(3) .scard-ico{ background: var(--success-light); color: var(--success); }
+  .scard-ico svg{ width: 20px; height: 20px; }
 
   /* ─── LAYOUT ─── */
   .layout{
-    display: grid; grid-template-columns: 300px 1fr; gap: 20px;
+    display: grid; grid-template-columns: 320px 1fr; gap: 20px;
     align-items: start;
   }
-  @media (max-width: 860px){ .layout{ grid-template-columns: 1fr; } }
+  @media (max-width: 880px){ .layout{ grid-template-columns: 1fr; } }
 
   /* ─── PANELS ─── */
   .panel{
@@ -175,23 +279,40 @@
   /* ─── OBJECT LIST ─── */
   .objlist-header{
     display:flex; justify-content:space-between; align-items:center;
-    padding: 16px 20px 12px;
+    padding: 16px 18px 10px;
   }
   .objlist-header h2{
-    font-size: 13px; font-weight: 600; color: var(--ink-tertiary);
+    font-size: 12.5px; font-weight: 700; color: var(--ink-tertiary);
     text-transform: uppercase; letter-spacing: 0.06em;
   }
   .add-btn{
-    background: var(--primary); color:#fff; border:none;
-    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--primary), #4F46E5);
+    color:#fff; border:none; border-radius: var(--radius-sm);
     width: 30px; height: 30px; font-size: 18px; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
-    transition: var(--transition); font-weight: 400;
+    transition: var(--transition); font-weight: 500;
+    box-shadow: 0 3px 10px rgba(37,99,235,0.22);
   }
-  .add-btn:hover{ background: var(--primary-hover); transform: scale(1.05); }
+  .add-btn:hover{ transform: scale(1.06); filter: brightness(1.06); }
+
+  .obj-search-wrap{ padding: 0 14px 12px; display:flex; flex-direction:column; gap:8px; }
+  .obj-search{
+    width: 100%; padding: 8px 12px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--bg-subtle);
+    color: var(--ink); font-size: 12.5px; font-family: inherit;
+    transition: var(--transition);
+  }
+  .obj-search:focus{ outline: none; border-color: var(--primary); }
+  .filter-pills{ display:flex; gap:4px; flex-wrap:wrap; }
+  .fpill{
+    border: none; background: var(--bg-subtle); color: var(--ink-secondary);
+    font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px;
+    cursor: pointer; font-family: inherit; transition: var(--transition);
+  }
+  .fpill.active{ background: var(--primary); color: #fff; }
 
   .obj-item{
-    padding: 14px 20px; border-top: 1px solid var(--border-light);
+    padding: 14px 18px; border-top: 1px solid var(--border-light);
     cursor:pointer; transition: var(--transition);
     display:flex; flex-direction:column; gap:6px;
   }
@@ -199,7 +320,7 @@
   .obj-item.active{
     background: var(--primary-light);
     border-left: 3px solid var(--primary);
-    padding-left: 17px;
+    padding-left: 15px;
   }
   .obj-item .name{
     font-weight: 600; font-size: 14px;
@@ -229,7 +350,7 @@
 
   /* ─── DETAIL ─── */
   .detail-head{
-    padding: 24px 24px 20px; border-bottom: 1px solid var(--border);
+    padding: 22px 24px 18px; border-bottom: 1px solid var(--border);
     display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;
   }
   .detail-head h2{ font-size: 20px; font-weight: 700; margin:0 0 4px; letter-spacing: -0.02em; }
@@ -251,9 +372,9 @@
   /* ─── STAT ROW ─── */
   .stat-row{
     display:grid; grid-template-columns: repeat(3,1fr); gap:12px;
-    padding: 20px 24px; border-bottom: 1px solid var(--border);
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
   }
-  .stat .lbl{ font-size: 11px; color: var(--ink-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat .lbl{ font-size: 11px; color: var(--ink-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
   .stat .val{ font-size: 18px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
   .stat.income .val{ color: var(--primary); }
   .stat.expense .val{ color: var(--danger); }
@@ -264,14 +385,14 @@
   .cat-bars{ padding: 16px 24px; border-bottom: 1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
   .cat-bar-row{ display:flex; align-items:center; gap:12px; font-size: 12px; }
   .cat-bar-row .cn{ width: 160px; flex-shrink:0; color: var(--ink-secondary); font-weight: 500; }
-  .cat-bar-row .track{ flex:1; height: 6px; background: var(--bg-subtle); border-radius: 100px; overflow:hidden; }
+  .cat-bar-row .track{ flex:1; height: 7px; background: var(--bg-subtle); border-radius: 100px; overflow:hidden; }
   .cat-bar-row .fill{ height:100%; border-radius: 100px; transition: width 0.5s ease; }
   .cat-bar-row .amt{ width: 110px; text-align:right; flex-shrink:0; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink-secondary); }
 
   /* ─── SECTIONS ─── */
   .section-title{
     padding: 16px 24px 8px; font-size: 11px; color: var(--ink-tertiary);
-    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
     border-top: 1px solid var(--border);
   }
 
@@ -290,7 +411,7 @@
   @media (max-width: 640px){ form.entry-form, form.inline-form{ grid-template-columns: 1fr 1fr; } }
   form.entry-form label, form.inline-form label{
     font-size: 11px; color: var(--ink-tertiary); display:block; margin-bottom:4px;
-    font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
   }
   form.entry-form select, form.entry-form input,
   form.inline-form select, form.inline-form input{
@@ -302,7 +423,7 @@
   form.entry-form select:focus, form.entry-form input:focus,
   form.inline-form select:focus, form.inline-form input:focus{
     outline: none; border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
   }
   form.entry-form button, form.inline-form button{
     background: var(--primary); color:#fff; border:none;
@@ -338,7 +459,7 @@
   .entry .edit, .entry .del{
     background:none; border:none; color: var(--ink-tertiary); cursor:pointer;
     font-size: 13px; padding: 4px 6px; border-radius: 6px;
-    transition: var(--transition); opacity: 0.6;
+    transition: var(--transition); opacity: 0.65;
   }
   .entry:hover .edit, .entry:hover .del{ opacity: 1; }
   .entry .del:hover{ color: var(--danger); background: var(--danger-light); }
@@ -355,19 +476,20 @@
   /* ─── MODALS ─── */
   dialog.modal{
     border:none; border-radius: var(--radius-xl); padding:0;
-    max-width: 440px; width: calc(100% - 32px);
+    max-width: 480px; width: calc(100% - 32px);
     background: var(--panel); color: var(--ink);
     box-shadow: var(--shadow-lg);
+    margin: auto;
   }
   dialog.modal::backdrop{
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
     backdrop-filter: blur(4px);
   }
-  .modal-pad{ padding: 28px; max-height: 80vh; overflow-y:auto; }
-  .modal-pad h3{ margin:0 0 20px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .modal-pad{ padding: 26px 28px; max-height: 82vh; overflow-y:auto; }
+  .modal-pad h3{ margin:0 0 18px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; display:flex; align-items:center; justify-content:space-between; }
   .modal-pad label{
-    font-size: 11px; color: var(--ink-tertiary); display:block; margin: 14px 0 4px;
-    font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+    font-size: 11px; color: var(--ink-tertiary); display:block; margin: 14px 0 5px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
   }
   .modal-pad input, .modal-pad select{
     width:100%; padding: 10px 12px; border-radius: var(--radius-sm);
@@ -377,21 +499,52 @@
   }
   .modal-pad input:focus, .modal-pad select:focus{
     outline: none; border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
   }
-  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
   .btn-ghost{
     background: var(--bg-subtle); border: none; color:var(--ink-secondary);
-    border-radius: var(--radius-sm); padding: 10px 18px; font-size: 13px;
+    border-radius: var(--radius-sm); padding: 9px 16px; font-size: 13px;
     cursor:pointer; font-weight: 500; font-family: inherit; transition: var(--transition);
   }
   .btn-ghost:hover{ background: var(--border); }
   .btn-solid{
     background: var(--primary); border:none; color:#fff;
-    border-radius: var(--radius-sm); padding: 10px 18px; font-size: 13px;
+    border-radius: var(--radius-sm); padding: 9px 16px; font-size: 13px;
     font-weight: 600; cursor:pointer; font-family: inherit; transition: var(--transition);
   }
   .btn-solid:hover{ background: var(--primary-hover); }
+  .btn-danger{
+    background: var(--danger-light); border: none; color: var(--danger);
+    border-radius: var(--radius-sm); padding: 9px 16px; font-size: 13px;
+    font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);
+  }
+  .btn-danger:hover{ background: var(--danger); color: #fff; }
+
+  /* ─── SECURITY & BACKUP MODAL TABS ─── */
+  .sec-tabs{ display:flex; gap:6px; margin-bottom:18px; background: var(--bg-subtle); padding:4px; border-radius: var(--radius-sm); }
+  .sec-tab{
+    flex:1; padding: 8px 10px; border:none; background:transparent;
+    color: var(--ink-secondary); font-size: 12.5px; font-weight: 600;
+    border-radius: 6px; cursor:pointer; font-family: inherit; transition: var(--transition);
+  }
+  .sec-tab.active{ background: var(--panel); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .backup-item{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    margin-bottom: 8px; font-size: 12.5px;
+  }
+  .backup-item .bdate{ font-weight: 700; }
+  .backup-item .bmeta{ font-size: 11px; color: var(--ink-tertiary); }
+  .backup-item .bacts{ display:flex; gap:6px; }
+  .mini-btn{
+    padding: 5px 10px; font-size: 11.5px; font-weight: 600; border-radius: 6px;
+    border: none; cursor: pointer; font-family: inherit; transition: var(--transition);
+    background: var(--primary-light); color: var(--primary);
+  }
+  .mini-btn:hover{ background: var(--primary); color: #fff; }
+  .mini-btn.sec{ background: var(--bg-subtle); color: var(--ink-secondary); }
+  .mini-btn.sec:hover{ background: var(--border); color: var(--ink); }
 
   /* ─── WORKERS ─── */
   .worker-row{
@@ -402,6 +555,21 @@
   .worker-row .wname{ font-weight: 600; }
   .worker-row .wmeta{ font-size: 11px; color: var(--ink-tertiary); margin-top:2px; }
   .worker-row .wamt{ font-weight: 700; color: var(--warning); font-variant-numeric: tabular-nums; }
+
+  /* ─── TOAST ─── */
+  .toast-wrap{
+    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+  }
+  .toast{
+    background: var(--panel); color: var(--ink);
+    border: 1px solid var(--border); border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm); padding: 12px 16px;
+    font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.25s ease; pointer-events: auto; max-width: 340px;
+  }
+  .toast.ok{ border-left-color: var(--success); }
+  .toast.err{ border-left-color: var(--danger); }
 
   /* ─── SCROLLBAR ─── */
   ::-webkit-scrollbar{ width: 6px; }
@@ -415,70 +583,129 @@
 </head>
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <div class="logo">
+<!-- AUTH LOADING / LOGIN SCREEN -->
+<div id="authScreen" class="auth-screen" style="display:none;">
+  <div class="auth-card" id="authCard">
+    <div class="auth-brand">
       <div class="logo-icon">P</div>
-      <div>
-        <div class="logo-text">PROVIK</div>
-        <div class="logo-sub">Obyektlar hisobi</div>
+      <h1>PROVIK</h1>
+      <p>Obyektlar hisobi tizimiga kirish</p>
+    </div>
+    <form id="loginForm">
+      <div class="auth-field">
+        <label for="loginPassword">Kirish paroli</label>
+        <div class="pass-wrap">
+          <input id="loginPassword" type="password" placeholder="Parolni kiriting" autocomplete="current-password" required>
+          <button type="button" class="pass-eye" id="togglePassVis" title="Parolni ko'rsatish">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="header-actions">
-      <button class="hbtn" id="openWorkersBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Ishchilar
-      </button>
-      <button class="hbtn" id="exportAllBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        CSV hisobot
-      </button>
-      <button class="hbtn" id="backupBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Zaxira
-      </button>
-      <button class="hbtn" id="restoreBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Yuklash
-      </button>
-      <input type="file" id="restoreFile" accept=".json,application/json" style="display:none;">
-      <button class="hbtn" id="themeToggle" title="Tungi rejim" style="padding: 7px 9px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-<div id="storageNote" style="display:none;"></div>
-
-<div class="wrap">
-  <div class="stats-grid">
-    <div class="scard">
-      <div class="s-label">Jami kelishilgan summa</div>
-      <div class="s-value" id="totContract">0</div>
-    </div>
-    <div class="scard">
-      <div class="s-label">Jami xarajat</div>
-      <div class="s-value" id="totExpense">0</div>
-    </div>
-    <div class="scard profit">
-      <div class="s-label">Umumiy foyda</div>
-      <div class="s-value" id="totProfit">0</div>
-    </div>
-  </div>
-
-  <div class="layout">
-    <div class="panel">
-      <div class="objlist-header">
-        <h2>Obyektlar</h2>
-        <button class="add-btn" id="openAddObj" title="Yangi obyekt">+</button>
-      </div>
-      <div id="objList"></div>
-    </div>
-
-    <div class="panel" id="detailPanel"></div>
+      <div id="loginError" class="auth-err"></div>
+      <button type="submit" class="auth-submit" id="loginSubmitBtn">Kirish</button>
+    </form>
+    <div class="auth-note">Ma'lumotlar himoyalangan va har kuni avtomatik zaxiralanadi</div>
   </div>
 </div>
 
+<!-- MAIN APP -->
+<div id="appRoot" style="display:none;">
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">P</div>
+        <div>
+          <div class="logo-text">
+            PROVIK
+            <span class="sync-pill" id="syncPill"><span class="sdot"></span>Online</span>
+          </div>
+          <div class="logo-sub">Obyektlar hisobi</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="hbtn" id="openWorkersBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Ishchilar
+        </button>
+        <button class="hbtn" id="exportAllBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          CSV hisobot
+        </button>
+        <button class="hbtn" id="backupBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Zaxira
+        </button>
+        <button class="hbtn" id="restoreBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Yuklash
+        </button>
+        <input type="file" id="restoreFile" accept=".json,application/json" style="display:none;">
+        <button class="hbtn" id="openSecurityBtn" title="Xavfsizlik va kunlik zaxiralar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Xavfsizlik
+        </button>
+        <button class="hbtn" id="themeToggle" title="Tungi rejim" style="padding: 7px 9px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="storageNote" style="display:none;"></div>
+
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="scard">
+        <div>
+          <div class="s-label">Jami kelishilgan summa</div>
+          <div class="s-value" id="totContract">0</div>
+        </div>
+        <div class="scard-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </div>
+      <div class="scard">
+        <div>
+          <div class="s-label">Jami xarajat</div>
+          <div class="s-value" id="totExpense">0</div>
+        </div>
+        <div class="scard-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        </div>
+      </div>
+      <div class="scard profit">
+        <div>
+          <div class="s-label">Umumiy foyda</div>
+          <div class="s-value" id="totProfit">0</div>
+        </div>
+        <div class="scard-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="objlist-header">
+          <h2>Obyektlar</h2>
+          <button class="add-btn" id="openAddObj" title="Yangi obyekt">+</button>
+        </div>
+        <div class="obj-search-wrap">
+          <input id="objSearchInput" class="obj-search" type="text" placeholder="Obyekt qidirish...">
+          <div class="filter-pills" id="objStatusFilters">
+            <button class="fpill active" data-st="">Barchasi</button>
+            <button class="fpill" data-st="jarayonda">Jarayonda</button>
+            <button class="fpill" data-st="tugallangan">Tugallangan</button>
+          </div>
+        </div>
+        <div id="objList"></div>
+      </div>
+
+      <div class="panel" id="detailPanel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD OBJECT MODAL -->
 <dialog class="modal" id="addObjModal">
   <div class="modal-pad">
     <h3>Yangi obyekt</h3>
@@ -508,6 +735,7 @@
   </div>
 </dialog>
 
+<!-- CONFIRM MODAL -->
 <dialog class="modal" id="confirmModal">
   <div class="modal-pad">
     <h3 id="confirmText">O'chirilsinmi?</h3>
@@ -518,6 +746,7 @@
   </div>
 </dialog>
 
+<!-- WORKERS MODAL -->
 <dialog class="modal" id="workersModal">
   <div class="modal-pad">
     <h3>Ishchilar</h3>
@@ -532,21 +761,105 @@
   </div>
 </dialog>
 
+<!-- SECURITY & DAILY BACKUPS MODAL -->
+<dialog class="modal" id="securityModal">
+  <div class="modal-pad">
+    <h3>
+      <span>Xavfsizlik va Zaxira</span>
+      <button class="btn-danger" id="logoutBtn" style="padding:6px 12px; font-size:12px;">Chiqish</button>
+    </h3>
+    <div class="sec-tabs">
+      <button class="sec-tab active" data-tab="backupsTab">Kunlik zaxiralar</button>
+      <button class="sec-tab" data-tab="passwordTab">Parolni almashtirish</button>
+    </div>
+
+    <div id="backupsTab">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px; padding:12px; background:var(--bg-subtle); border-radius:var(--radius-sm);">
+        <div>
+          <div style="font-size:13px; font-weight:600;">Avtomatik kunlik zaxira</div>
+          <div style="font-size:11.5px; color:var(--ink-tertiary);">Har kuni server + brauzerda saqlanadi</div>
+        </div>
+        <button class="btn-solid" id="backupNowBtn" style="padding:7px 12px; font-size:12px;">Hozir saqlash</button>
+      </div>
+      <div id="serverBackupsList" style="max-height:240px; overflow-y:auto;"></div>
+      <div id="localBackupBox" style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--ink-secondary);"></div>
+    </div>
+
+    <div id="passwordTab" style="display:none;">
+      <form id="changePasswordForm">
+        <label for="curPassInput">Joriy parol</label>
+        <input id="curPassInput" type="password" autocomplete="current-password" required>
+        <label for="newPassInput">Yangi parol (kamida 4 ta belgi)</label>
+        <input id="newPassInput" type="password" minlength="4" autocomplete="new-password" required>
+        <label for="confPassInput">Yangi parolni tasdiqlang</label>
+        <input id="confPassInput" type="password" minlength="4" autocomplete="new-password" required>
+        <div id="passChangeMsg" style="margin-top:10px; font-size:12.5px;"></div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-solid" id="savePassBtn">Parolni saqlash</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" id="closeSecurityBtn">Yopish</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
 <script>
-  // Vercel Serverless Function (Neon PostgreSQL API) ga ulanish
-  const API_URL = '/api/db'; 
-  
+  const API_URL = '/api/db';
+  const AUTH_URL = '/api/auth';
+  const TOKEN_KEY = 'provik_auth_token';
+
+  function showToast(msg, type){
+    const wrap = document.getElementById('toastWrap');
+    if(!wrap) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + (type || '');
+    el.textContent = msg;
+    wrap.appendChild(el);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3200);
+  }
+
+  function authHeaders(extra){
+    const h = Object.assign({}, extra || {});
+    try{
+      const tok = localStorage.getItem(TOKEN_KEY);
+      if(tok) h['Authorization'] = 'Bearer ' + tok;
+    }catch(e){}
+    return h;
+  }
+
+  async function apiFetch(url, opts){
+    const options = Object.assign({ credentials: 'include' }, opts || {});
+    options.headers = authHeaders(options.headers);
+    const res = await fetch(url, options);
+    if(res.status === 401){
+      if(typeof window.__onUnauthorized === 'function') window.__onUnauthorized();
+    }
+    return res;
+  }
+
   window.realDb = {
     collection: (name) => {
       return {
         onSnapshot: (cb) => {
           let timer = null;
+          let stopped = false;
           const poll = async () => {
+            if(stopped) return;
             try {
-              const res = await fetch(`${API_URL}?collection=${name}`);
-              if (!res.ok) { console.error('API error', name, res.status); timer = setTimeout(poll, 5000); return; }
+              const res = await apiFetch(`${API_URL}?collection=${name}`);
+              if (!res.ok) {
+                if(typeof window.__setSyncStatus === 'function') window.__setSyncStatus(false);
+                timer = setTimeout(poll, 5000);
+                return;
+              }
               const col = await res.json();
               if (col && !col.error) {
+                if(typeof window.__setSyncStatus === 'function') window.__setSyncStatus(true);
                 const data = {
                   docs: Object.keys(col).map(id => ({
                     id,
@@ -555,16 +868,18 @@
                 };
                 cb(data);
               } else {
-                console.error('API returned error', name, col);
+                if(typeof window.__setSyncStatus === 'function') window.__setSyncStatus(false);
               }
-            } catch (e) { console.error('Poll error', name, e); }
-            timer = setTimeout(poll, 3000);
+            } catch (e) {
+              if(typeof window.__setSyncStatus === 'function') window.__setSyncStatus(false);
+            }
+            if(!stopped) timer = setTimeout(poll, 3000);
           };
           poll();
-          return () => { if(timer) clearTimeout(timer); };
+          return () => { stopped = true; if(timer) clearTimeout(timer); };
         },
         add: async (obj) => {
-          const res = await fetch(`${API_URL}?collection=${name}`, {
+          const res = await apiFetch(`${API_URL}?collection=${name}`, {
             method: 'POST',
             body: JSON.stringify(obj),
             headers: { 'Content-Type': 'application/json' }
@@ -574,21 +889,21 @@
         doc: (id) => {
           return {
             update: async (patch) => {
-              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+              await apiFetch(`${API_URL}?collection=${name}&id=${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(patch),
                 headers: { 'Content-Type': 'application/json' }
               });
             },
             set: async (obj) => {
-              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+              await apiFetch(`${API_URL}?collection=${name}&id=${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(obj),
                 headers: { 'Content-Type': 'application/json' }
               });
             },
             delete: async () => {
-              await fetch(`${API_URL}?collection=${name}&id=${id}`, {
+              await apiFetch(`${API_URL}?collection=${name}&id=${id}`, {
                 method: 'DELETE'
               });
             }
@@ -600,17 +915,13 @@
 </script>
 
 <script>
-/* Mustaqil (offline) rejim: ma'lumotlar shu qurilma brauzerida saqlanadi. */
+/* Lokal zaxira va kunlik nusxalash */
 (function(){
   const KEY = 'provik_hisob_v1';
   let data = {};
-  let persistent = true;
-  try{ data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){ persistent = false; data = {}; }
+  try{ data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){ data = {}; }
   const listeners = {};
-  function save(){
-    try{ localStorage.setItem(KEY, JSON.stringify(data)); }
-    catch(e){ persistent = false; }
-  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){} }
   function snap(name){
     const col = data[name] || {};
     return { docs: Object.keys(col).map(id => ({ id, data: () => col[id] })) };
@@ -638,12 +949,6 @@
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   }
   async function saveFile(filename, text, mime){
-    try{
-      if(window.claude && typeof window.claude.use === 'function'){
-        const dl = await window.claude.use('downloads');
-        if(dl){ await dl.save({ filename, data: text }); return; }
-      }
-    }catch(e){ return; }
     download(filename, text, mime);
   }
   window.__localUse = async function(cap){
@@ -651,6 +956,7 @@
     if(cap === 'downloads') return { save: async ({ filename, data: d }) => saveFile(filename, d, 'text/csv') };
     throw new Error('unavailable');
   };
+  window.__downloadJson = (filename, obj) => saveFile(filename, JSON.stringify(obj, null, 2), 'application/json');
 
   const backupBtn = document.getElementById('backupBtn');
   const restoreBtn = document.getElementById('restoreBtn');
@@ -659,7 +965,8 @@
     const d = new Date(); const p = n => String(n).padStart(2, '0');
     const name = 'PROVIK_zaxira_' + d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + '.json';
     const exportObj = typeof window.__getExportData === 'function' ? window.__getExportData() : data;
-    saveFile(name, JSON.stringify(exportObj), 'application/json');
+    saveFile(name, JSON.stringify(exportObj, null, 2), 'application/json');
+    showToast('Zaxira fayli yuklab olindi', 'ok');
   });
   if(restoreBtn && restoreFile){
     restoreBtn.addEventListener('click', () => restoreFile.click());
@@ -680,8 +987,8 @@
                 n++;
               }
             }
-            alert("Zaxira serverga yuklandi: " + n + " ta yozuv qo'shildi/yangilandi.");
-            location.reload();
+            showToast("Zaxira serverga yuklandi: " + n + " ta yozuv", 'ok');
+            setTimeout(() => location.reload(), 800);
           } else {
             ['objects','entries','payments','workers'].forEach(name => {
               const col = inc[name]; if(!col || typeof col !== 'object') return;
@@ -690,57 +997,17 @@
             });
             save();
             ['objects','entries','payments','workers'].forEach(notify);
-            alert("Zaxira birlashtirildi: " + n + " ta yozuv qo'shildi/yangilandi.");
+            showToast("Zaxira birlashtirildi: " + n + " ta yozuv", 'ok');
           }
-        }catch(e){ alert("Fayl noto'g'ri. PROVIK zaxira faylini (.json) tanlang."); }
+        }catch(e){ showToast("Fayl noto'g'ri. PROVIK zaxira (.json) tanlang.", 'err'); }
         restoreFile.value = '';
       };
       r.readAsText(f);
     });
   }
-  window.addEventListener('load', () => {
-    if(!persistent){
-      const n = document.getElementById('storageNote');
-      if(n){ n.textContent = "Diqqat: brauzer ma'lumotni saqlamayapti."; n.style.color = 'var(--danger)'; n.style.display = 'block'; }
-    }
-    // localStorage'dagi eski ma'lumotlarni Neon bazasiga ko'chirish
-    const MIGRATED_KEY = 'provik_migrated_to_neon';
-    if(persistent && !localStorage.getItem(MIGRATED_KEY) && Object.keys(data).length > 0){
-      const hasAnyData = ['objects','entries','payments','workers'].some(col => data[col] && Object.keys(data[col]).length > 0);
-      if(hasAnyData){
-        const doMigrate = confirm("Brauzeringizda eski ma'lumotlar topildi (" +
-          Object.keys(data.objects||{}).length + " ta obyekt, " +
-          Object.keys(data.entries||{}).length + " ta xarajat). " +
-          "Ularni serverga ko'chirib o'tkazaymi?");
-        if(doMigrate){
-          (async function(){
-            let count = 0;
-            for(const colName of ['objects','entries','payments','workers']){
-              const col = data[colName];
-              if(!col) continue;
-              for(const [id, doc] of Object.entries(col)){
-                try{
-                  await fetch('/api/db?collection=' + colName + '&id=' + id, {
-                    method: 'PUT',
-                    body: JSON.stringify(doc),
-                    headers: { 'Content-Type': 'application/json' }
-                  });
-                  count++;
-                }catch(e){ console.error('Migration error', colName, id, e); }
-              }
-            }
-            localStorage.setItem(MIGRATED_KEY, Date.now().toString());
-            alert("Tayyor! " + count + " ta yozuv serverga ko'chirildi. Sahifa yangilanadi.");
-            location.reload();
-          })();
-        } else {
-          localStorage.setItem(MIGRATED_KEY, 'skipped');
-        }
-      }
-    }
-  });
 })();
 </script>
+
 <script>
 (function(){
   const CATS = [
@@ -756,6 +1023,8 @@
     {id:'boshqa', name:"Boshqa xarajat", color:'#6B7280'}
   ];
   const STATUS_LABELS = { jarayonda: 'Jarayonda', tugallangan: 'Tugallangan', toxtatilgan: "To'xtatilgan" };
+  const CACHE_KEY = 'provik_cache_v2';
+  const DAILY_LOCAL_KEY = 'provik_daily_backups';
 
   let state = { objects: [], activeId: null };
   let workers = [];
@@ -764,7 +1033,11 @@
   let downloadsCap = null;
   let dbStatus = 'connecting';
   let filterMonth = '';
+  let searchQuery = '';
+  let statusFilter = '';
   let editingEntryId = null;
+  let unsubscribers = [];
+  let appInitialized = false;
 
   const rawObjects = new Map();
   const rawEntries = new Map();
@@ -779,6 +1052,33 @@
       workers: Object.fromEntries(rawWorkers)
     };
   };
+
+  window.__setSyncStatus = function(ok){
+    const pill = document.getElementById('syncPill');
+    if(!pill) return;
+    pill.classList.toggle('err', !ok);
+    pill.innerHTML = ok ? '<span class="sdot"></span>Online' : '<span class="sdot"></span>Ulanish xatosi';
+  };
+
+  function saveLocalMirror(){
+    const totalCount = rawObjects.size + rawEntries.size + rawPayments.size + rawWorkers.size;
+    if(totalCount === 0) return;
+    try{
+      const snap = window.__getExportData();
+      snap.updatedAt = Date.now();
+      localStorage.setItem(CACHE_KEY, JSON.stringify(snap));
+
+      // Daily backup in localStorage (keep last 7 days)
+      const today = new Date(Date.now() + 5*3600*1000).toISOString().slice(0, 10);
+      let daily = {};
+      try{ daily = JSON.parse(localStorage.getItem(DAILY_LOCAL_KEY) || '{}') || {}; }catch(e){ daily = {}; }
+      daily[today] = snap;
+      const keys = Object.keys(daily).sort().reverse();
+      const trimmed = {};
+      keys.slice(0, 7).forEach(k => trimmed[k] = daily[k]);
+      localStorage.setItem(DAILY_LOCAL_KEY, JSON.stringify(trimmed));
+    }catch(e){}
+  }
 
   function rebuildStateFromRaw(){
     const entriesByObj = new Map();
@@ -809,9 +1109,19 @@
     workers = Array.from(rawWorkers.entries())
       .map(([id,w])=>({ id, name: w.name, createdAt: w.createdAt||0 }))
       .sort((a,b)=> a.name.localeCompare(b.name));
+
+    saveLocalMirror();
+  }
+
+  function stopDb(){
+    unsubscribers.forEach(u => { try{ if(typeof u === 'function') u(); }catch(e){} });
+    unsubscribers = [];
+    appInitialized = false;
   }
 
   async function initDb(){
+    if(appInitialized) return;
+    appInitialized = true;
     try{
       db = window.realDb || await window.__localUse('db');
     }catch(e){ db = window.realDb || null; }
@@ -823,39 +1133,112 @@
     }
     dbStatus = 'ready';
 
-    db.collection('objects').onSnapshot(snap=>{
+    unsubscribers.push(db.collection('objects').onSnapshot(snap=>{
       rawObjects.clear();
       snap.docs.forEach(d=>{ const data = d.data(); if(data) rawObjects.set(d.id, data); });
       rebuildStateFromRaw();
       renderAll();
-    }, err=>{ console.error('objects snapshot error', err); });
+    }));
 
-    db.collection('entries').onSnapshot(snap=>{
+    unsubscribers.push(db.collection('entries').onSnapshot(snap=>{
       rawEntries.clear();
       snap.docs.forEach(d=>{ const data = d.data(); if(data) rawEntries.set(d.id, data); });
       rebuildStateFromRaw();
       renderAll();
-    }, err=>{ console.error('entries snapshot error', err); });
+    }));
 
-    db.collection('payments').onSnapshot(snap=>{
+    unsubscribers.push(db.collection('payments').onSnapshot(snap=>{
       rawPayments.clear();
       snap.docs.forEach(d=>{ const data = d.data(); if(data) rawPayments.set(d.id, data); });
       rebuildStateFromRaw();
       renderAll();
-    }, err=>{ console.error('payments snapshot error', err); });
+    }));
 
-    db.collection('workers').onSnapshot(snap=>{
+    unsubscribers.push(db.collection('workers').onSnapshot(snap=>{
       rawWorkers.clear();
       snap.docs.forEach(d=>{ const data = d.data(); if(data) rawWorkers.set(d.id, data); });
       rebuildStateFromRaw();
       renderAll();
-    }, err=>{ console.error('workers snapshot error', err); });
+    }));
 
     assetsCap = null;
     try{ downloadsCap = await window.__localUse('downloads'); }catch(e){ downloadsCap = null; }
     renderAll();
   }
 
+  // ─── AUTH FLOW ───
+  function showAuthScreen(){
+    stopDb();
+    document.getElementById('appRoot').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'flex';
+    const inp = document.getElementById('loginPassword');
+    if(inp){ inp.value = ''; inp.focus(); }
+  }
+
+  function showMainApp(){
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appRoot').style.display = 'block';
+    renderAll();
+    initDb();
+  }
+
+  window.__onUnauthorized = function(){
+    try{ localStorage.removeItem(TOKEN_KEY); }catch(e){}
+    showAuthScreen();
+  };
+
+  async function checkSession(){
+    try{
+      const res = await fetch(AUTH_URL, { credentials: 'include', headers: authHeaders() });
+      if(res.ok){
+        showMainApp();
+        return;
+      }
+    }catch(e){}
+    showAuthScreen();
+  }
+
+  document.getElementById('togglePassVis').addEventListener('click', ()=>{
+    const inp = document.getElementById('loginPassword');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const pass = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginSubmitBtn');
+    const card = document.getElementById('authCard');
+    errEl.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Tekshirilmoqda...';
+    try{
+      const res = await fetch(AUTH_URL, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', password: pass })
+      });
+      const json = await res.json();
+      if(res.ok && json.ok){
+        if(json.token){
+          try{ localStorage.setItem(TOKEN_KEY, json.token); }catch(e){}
+        }
+        showMainApp();
+      } else {
+        errEl.textContent = json.error || "Parol noto'g'ri";
+        errEl.style.display = 'block';
+        card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      }
+    }catch(e){
+      errEl.textContent = "Serverga ulanib bo'lmadi";
+      errEl.style.display = 'block';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Kirish';
+  });
+
+  // ─── HELPERS & EXPORT ───
   function fmt(n){
     n = Math.round(Number(n)||0);
     return n.toLocaleString('ru-RU').replace(/,/g,' ') + " so'm";
@@ -928,7 +1311,7 @@
     document.getElementById('totExpense').textContent = fmt(expense);
     const profitEl = document.getElementById('totProfit');
     profitEl.textContent = fmt(profit);
-    profitEl.parentElement.classList.toggle('neg', profit < 0);
+    profitEl.closest('.scard').classList.toggle('neg', profit < 0);
     const exportAllBtn = document.getElementById('exportAllBtn');
     if(exportAllBtn){
       exportAllBtn.disabled = !downloadsCap;
@@ -946,7 +1329,17 @@
       list.innerHTML = '<div class="empty-list">Hali obyekt yo\'q.<br>Yuqoridagi <strong>+</strong> tugmasini bosing.</div>';
       return;
     }
-    list.innerHTML = state.objects.map(o=>{
+    const q = searchQuery.trim().toLowerCase();
+    const filtered = state.objects.filter(o=>{
+      if(statusFilter && o.status !== statusFilter) return false;
+      if(q && !String(o.name||'').toLowerCase().includes(q)) return false;
+      return true;
+    });
+    if(filtered.length === 0){
+      list.innerHTML = '<div class="empty-list">Mos obyekt topilmadi.</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(o=>{
       const t = objTotals(o);
       const cls = t.profit < 0 ? 'neg' : 'pos';
       const typeBadge = o.settlementType==='nds'
@@ -1008,16 +1401,12 @@
     const entriesHtml = entries.length ? entries.map(e=>{
       const cat = CATS.find(c=>c.id===e.cat) || CATS[CATS.length-1];
       const workerName = e.workerId ? (workers.find(w=>w.id===e.workerId)?.name) : null;
-      const receipt = e.receiptId ? `<a href="/_blob/${e.receiptId}" target="_blank" rel="noopener" title="Chekni ko'rish" style="flex-shrink:0;">
-          <img src="/_blob/${e.receiptId}" alt="chek" style="width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
-        </a>` : '';
       return `<div class="entry" data-eid="${e.id}">
         <div class="left">
           <div class="desc">${escapeHtml(e.desc || cat.name)}</div>
           <div class="tag"><span class="dot" style="background:${cat.color}"></span>${cat.name}${workerName?' · '+escapeHtml(workerName):''}${e.date? ' · '+e.date : ''}</div>
         </div>
         <div class="right">
-          ${receipt}
           <div class="amt expense">-${fmt(e.amount)}</div>
           <button class="edit" data-eid="${e.id}" title="Tahrirlash">✎</button>
           <button class="del" data-eid="${e.id}" title="O'chirish">✕</button>
@@ -1101,15 +1490,11 @@
           <label for="eWorker">Ishchi</label>
           <select id="eWorker">${workerOptionsHtml(editingEntry?editingEntry.workerId:null)}</select>
         </div>
-        <div style="grid-column: 1 / -1;${assetsCap ? '' : 'display:none;'}">
-          <label for="eReceipt">Chek/rasm (ixtiyoriy)</label>
-          <input id="eReceipt" type="file" accept="image/*" ${assetsCap ? '' : 'disabled'} style="padding:4px 0; border:none; background:none;">
-        </div>
         ${editingEntry ? `<button type="button" class="cancel-edit" id="cancelEditBtn" style="grid-column:1/-1;">Bekor qilish</button>` : ''}
       </form>
 
       <div style="padding: 12px 24px; border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <label for="filterMonthInput" style="font-size:11px; color:var(--ink-tertiary); font-weight:500;">Oy bo'yicha:</label>
+        <label for="filterMonthInput" style="font-size:11px; color:var(--ink-tertiary); font-weight:600;">Oy bo'yicha:</label>
         <input type="month" id="filterMonthInput" value="${filterMonth}" style="padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-subtle); color:var(--ink); font-size:12px; font-family:inherit;">
         ${filterMonth ? `<button class="icon-btn" id="clearFilterBtn">Barchasi</button><span style="font-size:12px;color:var(--ink-tertiary);">Shu oyda: ${fmt(filteredExpense)}</span>` : ''}
         <button class="icon-btn" id="exportObjBtn" style="margin-left:auto;" ${downloadsCap ? '' : 'disabled title="Mavjud emas"'}>CSV yuklab olish</button>
@@ -1137,7 +1522,7 @@
 
     document.getElementById('statusSelect').addEventListener('change', async (ev)=>{
       if(!db) return;
-      try{ await db.collection('objects').doc(obj.id).update({ status: ev.target.value }); }
+      try{ await db.collection('objects').doc(obj.id).update({ status: ev.target.value }); showToast('Holat yangilandi', 'ok'); }
       catch(e){ console.error('status update error', e); }
     });
 
@@ -1149,6 +1534,7 @@
           await Promise.all((obj.payments||[]).map(p=> db.collection('payments').doc(p.id).delete()));
           await db.collection('objects').doc(obj.id).delete();
           if(state.activeId===obj.id) state.activeId = null;
+          showToast("Obyekt o'chirildi", 'ok');
         }catch(e){ console.error('delete object error', e); }
       });
     });
@@ -1173,22 +1559,15 @@
       const amt = Number(document.getElementById('eAmt').value);
       const workerSel = document.getElementById('eWorker').value;
       const workerId = (cat==='ishchi' && workerSel && workerSel!=='__new__') ? workerSel : null;
-      const fileInput = document.getElementById('eReceipt');
-      const file = fileInput && fileInput.files && fileInput.files[0];
       if(!amt || amt<=0 || !db) return;
       const btn = ev.target.querySelector('button[type="submit"]');
       if(btn) btn.disabled = true;
       try{
-        let receiptId = null;
-        if(file && assetsCap){
-          try{ const up = await assetsCap.upload(file); receiptId = up.id; }
-          catch(e){ console.error('receipt upload error', e); }
-        }
         if(editingEntryId){
           const payload = { desc, cat, amount: amt, workerId: workerId || null };
-          if(receiptId) payload.receiptId = receiptId;
           await db.collection('entries').doc(editingEntryId).update(payload);
           editingEntryId = null;
+          showToast('Xarajat yangilandi', 'ok');
         } else {
           const payload = {
             objId: obj.id, desc, cat, amount: amt,
@@ -1196,8 +1575,8 @@
             createdAt: Date.now()
           };
           if(workerId) payload.workerId = workerId;
-          if(receiptId) payload.receiptId = receiptId;
           await db.collection('entries').add(payload);
+          showToast("Xarajat qo'shildi", 'ok');
         }
         ev.target.reset();
         renderDetail();
@@ -1210,7 +1589,7 @@
         const eid = btn.getAttribute('data-eid');
         askConfirm('Ushbu xarajatni o\'chirasizmi?', async ()=>{
           if(!db) return;
-          try{ await db.collection('entries').doc(eid).delete(); }
+          try{ await db.collection('entries').doc(eid).delete(); showToast("Xarajat o'chirildi", 'ok'); }
           catch(e){ console.error('delete entry error', e); }
         });
       });
@@ -1239,6 +1618,7 @@
           createdAt: Date.now()
         });
         ev.target.reset();
+        showToast("To'lov qo'shildi", 'ok');
       }catch(e){ console.error('add payment error', e); }
       if(btn) btn.disabled = false;
     });
@@ -1248,7 +1628,7 @@
         const pid = btn.getAttribute('data-pid');
         askConfirm('Ushbu to\'lovni o\'chirasizmi?', async ()=>{
           if(!db) return;
-          try{ await db.collection('payments').doc(pid).delete(); }
+          try{ await db.collection('payments').doc(pid).delete(); showToast("To'lov o'chirildi", 'ok'); }
           catch(e){ console.error('delete payment error', e); }
         });
       });
@@ -1297,8 +1677,6 @@
   function renderAll(){
     renderTotals();
     renderObjList();
-    // Agar foydalanuvchi detail panelda input/select ga yozayotgan bo'lsa,
-    // qayta render qilmaymiz (aks holda mobilda klaviatura yopiladi)
     const detail = document.getElementById('detailPanel');
     const active = document.activeElement;
     const isTyping = active && detail && detail.contains(active) &&
@@ -1308,6 +1686,19 @@
     }
     if(document.getElementById('workersModal').open) renderWorkersModal();
   }
+
+  // Search & Filter listeners
+  document.getElementById('objSearchInput').addEventListener('input', (ev)=>{
+    searchQuery = ev.target.value || '';
+    renderObjList();
+  });
+  document.getElementById('objStatusFilters').addEventListener('click', (ev)=>{
+    const btn = ev.target.closest('.fpill');
+    if(!btn) return;
+    statusFilter = btn.getAttribute('data-st') || '';
+    document.querySelectorAll('#objStatusFilters .fpill').forEach(p=> p.classList.toggle('active', p === btn));
+    renderObjList();
+  });
 
   // Add object modal
   const addObjModal = document.getElementById('addObjModal');
@@ -1340,6 +1731,7 @@
       const ref = await db.collection('objects').add(payload);
       state.activeId = ref.id;
       addObjModal.close();
+      showToast("Yangi obyekt qo'shildi", 'ok');
     }catch(e){ console.error('add object error', e); }
     saveBtn.disabled = false;
   });
@@ -1371,8 +1763,160 @@
     const input = document.getElementById('newWorkerName');
     const name = input.value.trim();
     if(!name || !db) return;
-    try{ await db.collection('workers').add({ name, createdAt: Date.now() }); input.value=''; }
+    try{ await db.collection('workers').add({ name, createdAt: Date.now() }); input.value=''; showToast("Ishchi qo'shildi", 'ok'); }
     catch(e){ console.error('add worker error', e); }
+  });
+
+  // ─── SECURITY & DAILY BACKUPS MODAL ───
+  const securityModal = document.getElementById('securityModal');
+  async function loadServerBackups(){
+    const listEl = document.getElementById('serverBackupsList');
+    const localEl = document.getElementById('localBackupBox');
+    listEl.innerHTML = '<div class="empty-list">Yuklanmoqda...</div>';
+    try{
+      const res = await apiFetch(API_URL + '?action=backups');
+      const json = await res.json();
+      const items = (json && json.backups) || [];
+      if(!items.length){
+        listEl.innerHTML = '<div class="empty-list">Hali server zaxirasi yo\'q. "Hozir saqlash" ni bosing.</div>';
+      } else {
+        listEl.innerHTML = items.map(b => `
+          <div class="backup-item">
+            <div>
+              <div class="bdate">${escapeHtml(b.backup_date)}</div>
+              <div class="bmeta">${b.record_count} ta yozuv</div>
+            </div>
+            <div class="bacts">
+              <button class="mini-btn sec" data-dl-date="${escapeHtml(b.backup_date)}">Yuklab olish</button>
+              <button class="mini-btn" data-rst-date="${escapeHtml(b.backup_date)}">Tiklash</button>
+            </div>
+          </div>
+        `).join('');
+        listEl.querySelectorAll('[data-dl-date]').forEach(btn=>{
+          btn.addEventListener('click', async ()=>{
+            const dt = btn.getAttribute('data-dl-date');
+            const r = await apiFetch(API_URL + '?action=backup-data&date=' + encodeURIComponent(dt));
+            const snap = await r.json();
+            window.__downloadJson('PROVIK_zaxira_' + dt + '.json', snap);
+          });
+        });
+        listEl.querySelectorAll('[data-rst-date]').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const dt = btn.getAttribute('data-rst-date');
+            askConfirm(`${dt} sanadagi zaxirani serverga tiklaysizmi?`, async ()=>{
+              const r = await apiFetch(API_URL + '?action=restore-backup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date: dt })
+              });
+              const resJson = await r.json();
+              if(r.ok && resJson.ok){
+                showToast(`Tiklandi: ${resJson.restored} ta yozuv`, 'ok');
+                setTimeout(() => location.reload(), 700);
+              } else {
+                showToast('Tiklashda xatolik', 'err');
+              }
+            });
+          });
+        });
+      }
+    }catch(e){
+      listEl.innerHTML = '<div class="empty-list">Server zaxiralarini yuklab bo\'lmadi.</div>';
+    }
+
+    // Local browser cache info
+    try{
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if(cached && cached.objects){
+        const cnt = Object.keys(cached.objects||{}).length;
+        const dt = cached.updatedAt ? new Date(cached.updatedAt).toLocaleString('uz-UZ') : '';
+        localEl.innerHTML = `<div>Brauzer xotirasidagi nusxa: <strong>${cnt} ta obyekt</strong> (${dt})</div>
+          <button class="mini-btn sec" id="downloadLocalCacheBtn" style="margin-top:6px;">Brauzer nusxasini yuklab olish (.json)</button>`;
+        document.getElementById('downloadLocalCacheBtn').addEventListener('click', ()=>{
+          window.__downloadJson('PROVIK_brauzer_nusxa.json', cached);
+        });
+      } else {
+        localEl.textContent = "Brauzer xotirasida hozircha lokal nusxa yo'q.";
+      }
+    }catch(e){}
+  }
+
+  document.getElementById('openSecurityBtn').addEventListener('click', ()=>{
+    document.getElementById('passChangeMsg').textContent = '';
+    securityModal.showModal();
+    loadServerBackups();
+  });
+  document.getElementById('closeSecurityBtn').addEventListener('click', ()=> securityModal.close());
+
+  document.querySelectorAll('.sec-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.sec-tab').forEach(t=> t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-tab');
+      document.getElementById('backupsTab').style.display = target === 'backupsTab' ? 'block' : 'none';
+      document.getElementById('passwordTab').style.display = target === 'passwordTab' ? 'block' : 'none';
+    });
+  });
+
+  document.getElementById('backupNowBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('backupNowBtn');
+    btn.disabled = true;
+    try{
+      const r = await apiFetch(API_URL + '?action=backup-now', { method: 'POST' });
+      const j = await r.json();
+      if(r.ok && j.ok){
+        saveLocalMirror();
+        showToast(`Kunlik zaxira saqlandi (${j.record_count} ta yozuv)`, 'ok');
+        loadServerBackups();
+      } else {
+        showToast('Zaxira olishda xato', 'err');
+      }
+    }catch(e){ showToast('Xatolik yuz berdi', 'err'); }
+    btn.disabled = false;
+  });
+
+  document.getElementById('changePasswordForm').addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const cur = document.getElementById('curPassInput').value;
+    const nw = document.getElementById('newPassInput').value;
+    const cf = document.getElementById('confPassInput').value;
+    const msgEl = document.getElementById('passChangeMsg');
+    if(nw !== cf){
+      msgEl.style.color = 'var(--danger)';
+      msgEl.textContent = 'Yangi parollar mos kelmadi!';
+      return;
+    }
+    const btn = document.getElementById('savePassBtn');
+    btn.disabled = true;
+    try{
+      const res = await apiFetch(AUTH_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'change-password', currentPassword: cur, newPassword: nw })
+      });
+      const json = await res.json();
+      if(res.ok && json.ok){
+        if(json.token){ try{ localStorage.setItem(TOKEN_KEY, json.token); }catch(e){} }
+        msgEl.style.color = 'var(--success)';
+        msgEl.textContent = 'Parol muvaffaqiyatli almashtirildi!';
+        ev.target.reset();
+        showToast('Parol yangilandi', 'ok');
+      } else {
+        msgEl.style.color = 'var(--danger)';
+        msgEl.textContent = json.error || 'Xatolik yuz berdi';
+      }
+    }catch(e){
+      msgEl.style.color = 'var(--danger)';
+      msgEl.textContent = 'Serverga ulanib bo\'lmadi';
+    }
+    btn.disabled = false;
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+    try{ await fetch(AUTH_URL, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'logout' }) }); }catch(e){}
+    try{ localStorage.removeItem(TOKEN_KEY); }catch(e){}
+    securityModal.close();
+    showAuthScreen();
   });
 
   // Theme toggle
@@ -1387,13 +1931,14 @@
   }
   themeToggle.addEventListener('click', ()=>{
     const cur = document.documentElement.getAttribute('data-theme');
-    document.documentElement.setAttribute('data-theme', cur==='dark' ? 'light' : 'dark');
+    const next = cur==='dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('provik_theme', next); }catch(e){}
     applyThemeLabel();
   });
   applyThemeLabel();
 
-  renderAll();
-  initDb();
+  checkSession();
 })();
 </script>
 </body>
